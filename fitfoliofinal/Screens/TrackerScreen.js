@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./style";
 
-const LoginScreen = () => {};
+const TrackerScreen = () => {};
 
-export default LoginScreen;
+export default TrackerScreen;
