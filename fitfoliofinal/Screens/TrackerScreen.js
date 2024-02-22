@@ -12,7 +12,11 @@ import {
 } from "react-native";
 
 const TrackerScreen = () => {
-  return <View style={styles.box}></View>;
+  return (
+    <View>
+      <View style={styles.box}></View>
+    </View>
+  );
 };
 
 export default TrackerScreen;
