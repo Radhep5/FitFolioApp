@@ -16,5 +16,9 @@ const styles = StyleSheet.create({
     border: 1,
     margin: 20,
   },
+
+  calendarPad: {
+    paddingBottom: 30,
+  },
 });
 export default styles;
