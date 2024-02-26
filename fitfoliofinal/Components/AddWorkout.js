@@ -26,12 +26,19 @@ const AddWorkoutButton = ({ title, onPress }) => {
     console.log("Repetitions:", repetitions);
   };
 
+  const handleSaveWorkoutAndCloseModal = () => {
+    handleSaveWorkout();
+    setIsVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.button}
+        style={styles.buttonClear}
         onPress={() => setIsVisible(true)}
-      ></TouchableOpacity>
+      >
+        <Text style={styles.buttonTextClear}>{title}</Text>
+      </TouchableOpacity>
 
       <Modal visible={isVisible} animationType="slide">
         <View style={styles.modalContainer}>
@@ -64,7 +71,10 @@ const AddWorkoutButton = ({ title, onPress }) => {
               }}
             />
           ))}
-          <Button title="Save Workout" onPress={handleSaveWorkout} />
+          <Button
+            title="Save Workout"
+            onPress={handleSaveWorkoutAndCloseModal}
+          />
         </View>
       </Modal>
     </View>
@@ -72,7 +82,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
 };
 
 const styles = StyleSheet.create({
-  button: {
+  buttonClear: {
     borderWidth: 2,
     width: 330,
     height: 120,
@@ -84,11 +94,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
-  buttonText: {
+  buttonTextClear: {
     color: "#7A7A7A",
     fontSize: 40,
   },
   container: {
+    paddingTop: 70,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
