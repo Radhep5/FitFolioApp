@@ -14,6 +14,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
   const [repetitions, setRepetitions] = useState([]);
+  const [workoutHistory, setWorkoutHistory] = useState([]);
 
   const handleAddRepetitions = () => {
     const newRepetitions = [...repetitions, ""];
@@ -21,6 +22,12 @@ const AddWorkoutButton = ({ title, onPress }) => {
   };
 
   const handleSaveWorkout = () => {
+    const workout = {
+      name: workoutName,
+      sets: sets,
+      repetitions: repetitions,
+    };
+    setWorkoutHistory([...workoutHistory, workout]);
     console.log("Workout Name:", workoutName);
     console.log("Sets:", sets);
     console.log("Repetitions:", repetitions);
@@ -33,6 +40,17 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.workoutHistoryContainer}>
+        {workoutHistory.map((workout, index) => (
+          <View key={index} style={styles.workoutBox}>
+            <Text style={styles.historyHeading}>{workout.name}</Text>
+            <Text style={styles.historyHeading}>Sets: {workout.sets}</Text>
+            <Text style={styles.historyHeading}>
+              Repetitions: {workout.repetitions.join(", ")}
+            </Text>
+          </View>
+        ))}
+      </View>
       <TouchableOpacity
         style={styles.buttonClear}
         onPress={() => setIsVisible(true)}
@@ -130,6 +148,26 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+  },
+  workoutHistoryContainer: {
+    marginTop: 20,
+  },
+  historyHeading: {
+    fontSize: 18,
+    color: "white",
+    marginBottom: 10,
+  },
+  workoutBox: {
+    borderWidth: 2,
+    width: 330,
+    height: 120,
+    borderRadius: 10,
+    borderColor: "white",
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingBottom: 10,
   },
 });
 
