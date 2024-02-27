@@ -23,7 +23,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
     setRepetitions(newRepetitions);
   };
 
-  const handleSaveWorkoutAndCloseModal = () => {
+  const handleSaveWorkout = () => {
     const workout = {
       name: workoutName,
       sets: sets,
