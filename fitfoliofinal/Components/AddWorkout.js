@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { trackerDB } from "../config/firebase.js";
 import {
   View,
   Text,
@@ -31,6 +33,22 @@ const AddWorkoutButton = ({ title, onPress }) => {
     console.log("Workout Name:", workoutName);
     console.log("Sets:", sets);
     console.log("Repetitions:", repetitions);
+
+    const setDataInFirestore = async () => {
+      try {
+        workoutHistory.forEach(async (workout, index) => {
+          const docRef = doc(trackerDB, "user", "date");
+          await setDoc(docRef, workout);
+        });
+      } catch (error) {
+        console.error("error", error);
+      }
+    };
+    setDataInFirestore();
+  };
+
+  const handleSaveWorkoutAndCloseModal = () => {
+    handleSaveWorkout();
     setIsVisible(false);
   };
 
