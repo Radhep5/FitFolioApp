@@ -24,6 +24,7 @@ const Calendar = () => {
     setText(fDate);
 
     console.log(fDate);
+    module.exports = fDate;
   };
 
   return (
