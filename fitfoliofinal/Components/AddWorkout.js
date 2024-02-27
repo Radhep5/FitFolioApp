@@ -23,7 +23,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
     setRepetitions(newRepetitions);
   };
 
-  const handleSaveWorkout = () => {
+  const handleSaveWorkoutAndCloseModal = () => {
     const workout = {
       name: workoutName,
       sets: sets,
@@ -64,13 +64,13 @@ const AddWorkoutButton = ({ title, onPress }) => {
             </Text>
           </View>
         ))}
+        <TouchableOpacity
+          style={styles.buttonClear}
+          onPress={() => setIsVisible(true)}
+        >
+          <Text style={styles.buttonTextClear}>{title}</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.buttonClear}
-        onPress={() => setIsVisible(true)}
-      >
-        <Text style={styles.buttonTextClear}>{title}</Text>
-      </TouchableOpacity>
 
       <Modal visible={isVisible} animationType="slide">
         <View style={styles.modalContainer}>
@@ -131,7 +131,6 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   container: {
-    paddingTop: 70,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
   historyHeading: {
     fontSize: 18,
     color: "white",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   workoutBox: {
     borderWidth: 2,
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    paddingBottom: 10,
+    marginBottom: 25,
   },
 });
 
