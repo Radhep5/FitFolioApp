@@ -88,7 +88,11 @@ const AddWorkoutButton = ({ title, onPress }) => {
             value={sets.toString()}
             onChangeText={(text) => setSets(parseInt(text) || 0)}
           />
-          <Button title="Add Repetitions" onPress={handleAddRepetitions} />
+          <Button
+            title="Add Repetitions"
+            onPress={handleAddRepetitions}
+            style={styles.addButton}
+          />
           {repetitions.map((item, index) => (
             <TextInput
               key={index}
@@ -106,6 +110,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
           <Button
             title="Save Workout"
             onPress={handleSaveWorkoutAndCloseModal}
+            style={styles.addButton}
           />
         </View>
       </Modal>
@@ -144,6 +149,10 @@ const styles = StyleSheet.create({
     color: "#fff", // Adjust text color as needed
     fontSize: 16,
   },
+  addButton: {
+    color: "3F9DF3",
+    fontSize: 40,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -164,11 +173,6 @@ const styles = StyleSheet.create({
   },
   workoutHistoryContainer: {
     marginTop: 20,
-  },
-  historyHeading: {
-    fontSize: 18,
-    color: "white",
-    marginBottom: 5,
   },
   workoutBox: {
     borderWidth: 2,
