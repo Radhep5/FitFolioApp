@@ -150,18 +150,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   addButton: {
-    color: "3F9DF3",
     fontSize: 40,
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#1E1E1E",
     padding: 20,
   },
   heading: {
     fontSize: 20,
     marginBottom: 10,
+    color: "#7A7A7A",
   },
   historyHeading: {
     fontSize: 18,
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+    color: "#7A7A7A",
   },
   workoutHistoryContainer: {
     marginTop: 20,
