@@ -163,6 +163,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 10,
   },
+  historyHeading: {
+    fontSize: 18,
+    color: "white",
+    marginBottom: 5,
+  },
   input: {
     width: "100%",
     borderWidth: 1,
