@@ -16,11 +16,16 @@ const AddWorkoutButton = ({ title, onPress }) => {
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
   const [repetitions, setRepetitions] = useState([]);
+  const [lbs, setLBS] = useState([]);
+
   const [workoutHistory, setWorkoutHistory] = useState([]);
 
-  const handleAddRepetitions = () => {
+  const handleAddRepetitionsSets = () => {
     const newRepetitions = [...repetitions, ""];
     setRepetitions(newRepetitions);
+    const newLBS = [...lbs, ""];
+    setLBS(newLBS);
+    setSets(newRepetitions.length);
   };
 
   const handleSaveWorkout = () => {
@@ -28,11 +33,13 @@ const AddWorkoutButton = ({ title, onPress }) => {
       name: workoutName,
       sets: sets,
       repetitions: repetitions,
+      lbs: lbs,
     };
     setWorkoutHistory([...workoutHistory, workout]);
     console.log("Workout Name:", workoutName);
     console.log("Sets:", sets);
     console.log("Repetitions:", repetitions);
+    console.log("LBS:", lbs);
 
     const setDataInFirestore = async () => {
       try {
@@ -50,6 +57,10 @@ const AddWorkoutButton = ({ title, onPress }) => {
   const handleSaveWorkoutAndCloseModal = () => {
     handleSaveWorkout();
     setIsVisible(false);
+    setWorkoutName("");
+    setSets(1);
+    setRepetitions([]);
+    setLBS([]);
   };
 
   return (
@@ -60,7 +71,10 @@ const AddWorkoutButton = ({ title, onPress }) => {
             <Text style={styles.historyHeading}>{workout.name}</Text>
             <Text style={styles.historyHeading}>Sets: {workout.sets}</Text>
             <Text style={styles.historyHeading}>
-              Repetitions: {workout.repetitions.join(", ")}
+              Reps: {workout.repetitions.join(", ")}
+            </Text>
+            <Text style={styles.historyHeading}>
+              LBS: {workout.lbs.join(", ")}
             </Text>
           </View>
         ))}
@@ -78,37 +92,49 @@ const AddWorkoutButton = ({ title, onPress }) => {
           <TextInput
             style={styles.input}
             placeholder="Workout Name"
+            placeholderTextColor="#7A7A7A"
             value={workoutName}
             onChangeText={(text) => setWorkoutName(text)}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Number of Sets"
-            keyboardType="numeric"
-            value={sets.toString()}
-            onChangeText={(text) => setSets(parseInt(text) || 0)}
-          />
           <Button
-            title="Add Repetitions"
-            onPress={handleAddRepetitions}
+            title="Add Sets"
+            color="#3F9DF3"
+            onPress={handleAddRepetitionsSets}
             style={styles.addButton}
           />
-          {repetitions.map((item, index) => (
-            <TextInput
-              key={index}
-              style={styles.input}
-              placeholder={`Repetitions for Set ${index + 1}`}
-              keyboardType="numeric"
-              value={item}
-              onChangeText={(text) => {
-                const newRepetitions = [...repetitions];
-                newRepetitions[index] = text;
-                setRepetitions(newRepetitions);
-              }}
-            />
-          ))}
+          <View style={styles.inputBigContainer}>
+            {repetitions.map((item, index) => (
+              <View key={index} style={styles.inputContainer}>
+                <TextInput
+                  style={styles.inputSets}
+                  placeholder={`Reps for Set ${index + 1}`}
+                  placeholderTextColor="#7A7A7A"
+                  keyboardType="numeric"
+                  value={item}
+                  onChangeText={(text) => {
+                    const newRepetitions = [...repetitions];
+                    newRepetitions[index] = text;
+                    setRepetitions(newRepetitions);
+                  }}
+                />
+                <TextInput
+                  style={styles.inputSets}
+                  placeholder={`LBS for Set ${index + 1}`}
+                  placeholderTextColor="#7A7A7A"
+                  keyboardType="numeric"
+                  value={lbs[index] || ""}
+                  onChangeText={(text) => {
+                    const newLBS = [...lbs];
+                    newLBS[index] = text;
+                    setLBS(newLBS);
+                  }}
+                />
+              </View>
+            ))}
+          </View>
           <Button
             title="Save Workout"
+            color="#3F9DF3"
             onPress={handleSaveWorkoutAndCloseModal}
             style={styles.addButton}
           />
@@ -151,6 +177,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     fontSize: 40,
+    paddingBottom: 25,
   },
   modalContainer: {
     flex: 1,
@@ -161,13 +188,20 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 20,
-    marginBottom: 10,
-    color: "#7A7A7A",
+    marginBottom: 30,
+    color: "white",
   },
   historyHeading: {
     fontSize: 18,
     color: "white",
     marginBottom: 5,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  inputBigContainer: {
+    marginTop: 10,
   },
   input: {
     width: "100%",
@@ -176,7 +210,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    color: "#7A7A7A",
+    color: "white",
+  },
+  inputSets: {
+    width: "45%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    color: "white",
+    marginHorizontal: 6,
   },
   workoutHistoryContainer: {
     marginTop: 20,
