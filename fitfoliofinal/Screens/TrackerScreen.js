@@ -14,7 +14,7 @@ import {
   Image,
 } from "react-native";
 
-const TrackerScreen = () => {
+const TrackerScreen = ({ navigation }) => {
   return (
     <View>
       <View style={styles.box}></View>
