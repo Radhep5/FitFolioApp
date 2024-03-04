@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 const AddWorkoutButton = ({ title, onPress }) => {
-  const [isVisible, setIsVisible] = useState(false); // State to control visibility of the popup
+  const [isVisible, setIsVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
   const [repetitions, setRepetitions] = useState([]);
