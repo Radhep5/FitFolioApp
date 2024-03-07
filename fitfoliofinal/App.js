@@ -23,10 +23,21 @@ const Stack = createStackNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "#3F9DF3",
-        tabBarActiveBackgroundColor: "#1E1E1E",
+        tabBarInactiveTintColor: "#FFFFFF",
+        tabBarLabelStyle: {
+          color: "#FFFFFF",
+        },
+        headerTitleStyle: {
+          color: "#FFFFFF",
+        },
+        headerStyle: {
+          backgroundColor: "#2F2F2F",
+        },
+        tabBarStyle: {
+          backgroundColor: "#2F2F2F",
+        },
       }}
     >
       <Tab.Screen

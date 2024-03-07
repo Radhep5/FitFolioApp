@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import styles from "./style";
 
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 const CommunityScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.testBox}></View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default CommunityScreen;
