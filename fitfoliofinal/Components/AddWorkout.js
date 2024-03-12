@@ -10,7 +10,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  KeyboardAvoidingView,
   Keyboard,
 } from "react-native";
 
@@ -70,86 +69,84 @@ const AddWorkoutButton = ({ title, onPress }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.containerView} behavior="padding">
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
-          <View style={styles.workoutHistoryContainer}>
-            {workoutHistory.map((workout, index) => (
-              <View key={index} style={styles.workoutBox}>
-                <Text style={styles.historyTitle}>{workout.name}</Text>
-                <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
-                <Text style={styles.historyHeading}>
-                  {workout.repetitions.join("  | |  ")}
-                </Text>
-                <Text style={styles.historyHeading}>
-                  {workout.lbs.join("  | |  ")}
-                </Text>
-              </View>
-            ))}
-            <TouchableOpacity
-              style={styles.buttonClear}
-              onPress={() => setIsVisible(true)}
-            >
-              <Text style={styles.buttonTextClear}>{title}</Text>
-            </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.workoutHistoryContainer}>
+        {workoutHistory.map((workout, index) => (
+          <View key={index} style={styles.workoutBox}>
+            <Text style={styles.historyTitle}>{workout.name}</Text>
+            <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
+            <Text style={styles.historyHeading}>
+              {workout.repetitions.join("  | |  ")}
+            </Text>
+            <Text style={styles.historyHeading}>
+              {workout.lbs.join("  | |  ")}
+            </Text>
           </View>
-          <Modal visible={isVisible} animationType="slide">
-            <View style={styles.modalContainer}>
-              <Text style={styles.heading}>Add Workout</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Workout Name"
-                placeholderTextColor="#7A7A7A"
-                value={workoutName}
-                onChangeText={(text) => setWorkoutName(text)}
-              />
-              <Button
-                title="Add Sets"
-                color="#3F9DF3"
-                onPress={handleAddRepetitionsSets}
-                style={styles.addButton}
-              />
-              <View style={styles.inputBigContainer}>
-                {repetitions.map((item, index) => (
-                  <View key={index} style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.inputSets}
-                      placeholder={`Reps for Set ${index + 1}`}
-                      placeholderTextColor="#7A7A7A"
-                      keyboardType="numeric"
-                      value={item}
-                      onChangeText={(text) => {
-                        const newRepetitions = [...repetitions];
-                        newRepetitions[index] = text;
-                        setRepetitions(newRepetitions);
-                      }}
-                    />
-                    <TextInput
-                      style={styles.inputSets}
-                      placeholder={`LBS for Set ${index + 1}`}
-                      placeholderTextColor="#7A7A7A"
-                      keyboardType="numeric"
-                      value={lbs[index] || ""}
-                      onChangeText={(text) => {
-                        const newLBS = [...lbs];
-                        newLBS[index] = text;
-                        setLBS(newLBS);
-                      }}
-                    />
-                  </View>
-                ))}
-              </View>
-              <Button
-                title="Save Workout"
-                color="#3F9DF3"
-                onPress={handleSaveWorkoutAndCloseModal}
-                style={styles.addButton}
-              />
+        ))}
+        <TouchableOpacity
+          style={styles.buttonClear}
+          onPress={() => setIsVisible(true)}
+        >
+          <Text style={styles.buttonTextClear}>{title}</Text>
+        </TouchableOpacity>
+      </View>
+      <Modal visible={isVisible} animationType="slide">
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.heading}>Add Workout</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Workout Name"
+              placeholderTextColor="#7A7A7A"
+              value={workoutName}
+              onChangeText={(text) => setWorkoutName(text)}
+            />
+            <Button
+              title="Add Sets"
+              color="#3F9DF3"
+              onPress={handleAddRepetitionsSets}
+              style={styles.addButton}
+            />
+            <View style={styles.inputBigContainer}>
+              {repetitions.map((item, index) => (
+                <View key={index} style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.inputSets}
+                    placeholder={`Reps for Set ${index + 1}`}
+                    placeholderTextColor="#7A7A7A"
+                    keyboardType="numeric"
+                    value={item}
+                    onChangeText={(text) => {
+                      const newRepetitions = [...repetitions];
+                      newRepetitions[index] = text;
+                      setRepetitions(newRepetitions);
+                    }}
+                  />
+                  <TextInput
+                    style={styles.inputSets}
+                    placeholder={`LBS for Set ${index + 1}`}
+                    placeholderTextColor="#7A7A7A"
+                    keyboardType="numeric"
+                    value={lbs[index] || ""}
+                    onChangeText={(text) => {
+                      const newLBS = [...lbs];
+                      newLBS[index] = text;
+                      setLBS(newLBS);
+                    }}
+                  />
+                </View>
+              ))}
             </View>
-          </Modal>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+            <Button
+              title="Save Workout"
+              color="#3F9DF3"
+              onPress={handleSaveWorkoutAndCloseModal}
+              style={styles.addButton}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    </View>
   );
 };
 
@@ -179,6 +176,12 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#007AFF", // Adjust button color as needed
     borderRadius: 5,
+  },
+  temp: {
+    padding: 10,
+    backgroundColor: "#007AFF", // Adjust button color as needed
+    borderRadius: 5,
+    alignSelf: "flex-start",
   },
   buttonText: {
     color: "#fff", // Adjust text color as needed
