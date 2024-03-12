@@ -33,7 +33,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
   const handleSaveWorkout = () => {
     const repetitionsWithLabel = repetitions.map((rep) => `${rep} Reps`);
-    const lbsWithLabel = repetitions.map((rep) => `${rep} LBS`);
+    const lbsWithLabel = lbs.map((rep) => `${rep} LBS`);
 
     const workout = {
       name: workoutName,
@@ -77,7 +77,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
             {workoutHistory.map((workout, index) => (
               <View key={index} style={styles.workoutBox}>
                 <Text style={styles.historyTitle}>{workout.name}</Text>
-                <Text style={styles.historyHeading}>{workout.sets} Set(s)</Text>
+                <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
                 <Text style={styles.historyHeading}>
                   {workout.repetitions.join("  | |  ")}
                 </Text>
@@ -205,9 +205,16 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 20,
     marginTop: 12,
-    marginBottom: -20,
+    marginBottom: -10,
     alignSelf: "flex-start",
     fontWeight: "bold",
+  },
+  historySets: {
+    fontSize: 18,
+    color: "white",
+    marginBottom: 5,
+    marginRight: 20,
+    alignSelf: "flex-end",
   },
   historyHeading: {
     fontSize: 18,
