@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from "react-native";
 
 const AddWorkoutButton = ({ title, onPress }) => {
@@ -70,26 +71,35 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.workoutHistoryContainer}>
-        {workoutHistory.map((workout, index) => (
-          <View key={index} style={styles.workoutBox}>
-            <Text style={styles.historyTitle}>{workout.name}</Text>
-            <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
-            <Text style={styles.historyHeading}>
-              {workout.repetitions.join("  | |  ")}
-            </Text>
-            <Text style={styles.historyHeading}>
-              {workout.lbs.join("  | |  ")}
-            </Text>
-          </View>
-        ))}
+      <ScrollView>
+        <View style={styles.workoutHistoryContainer}>
+          {workoutHistory.map((workout, index) => (
+            <View key={index} style={styles.workoutBox}>
+              <Text style={styles.historyTitle}>{workout.name}</Text>
+              <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
+              <Text style={styles.historyHeading}>
+                {workout.repetitions.join("  | |  ")}
+              </Text>
+              <Text style={styles.historyHeading}>
+                {workout.lbs.join("  | |  ")}
+              </Text>
+            </View>
+          ))}
+          <TouchableOpacity
+            style={styles.buttonClear}
+            onPress={() => setIsVisible(true)}
+          >
+            <Text style={styles.buttonTextClear}>{title}</Text>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
-          style={styles.buttonClear}
+          style={styles.addButton}
           onPress={() => setIsVisible(true)}
         >
-          <Text style={styles.buttonTextClear}>{title}</Text>
+          <Text style={styles.buttonText}>Add Workout</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
+
       <Modal visible={isVisible} animationType="slide">
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <View style={styles.modalContainer}>
