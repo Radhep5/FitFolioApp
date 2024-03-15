@@ -8,7 +8,6 @@ import HomeScreen from "./Screens/HomeScreen";
 import CuratedInfoScreen from "./Screens/CuratedInfoScreen";
 import CommunityScreen from "./Screens/CommunityScreen";
 import AccountScreen from "./Screens/AccountScreen";
-import { createStackNavigator } from "@react-navigation/stack";
 import {
   CurrentRenderContext,
   NavigationContainer,
@@ -18,7 +17,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 
 export const TabNavigator = () => {
   return (
