@@ -71,7 +71,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.scrollContent}>
         <View style={styles.workoutHistoryContainer}>
           {workoutHistory.map((workout, index) => (
             <View key={index} style={styles.workoutBox}>
@@ -92,12 +92,6 @@ const AddWorkoutButton = ({ title, onPress }) => {
             <Text style={styles.buttonTextClear}>{title}</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => setIsVisible(true)}
-        >
-          <Text style={styles.buttonText}>Add Workout</Text>
-        </TouchableOpacity>
       </ScrollView>
 
       <Modal visible={isVisible} animationType="slide">
@@ -178,9 +172,13 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   container: {
-    flex: 1,
+    position: "relative",
     justifyContent: "center",
     alignItems: "center",
+  },
+  scrollContent: {
+    borderColor: "white",
+    height: 620,
   },
   button: {
     padding: 10,
