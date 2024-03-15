@@ -20,7 +20,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const TabNavigator = () => {
+export const TabNavigator = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"

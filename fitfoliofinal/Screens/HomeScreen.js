@@ -5,13 +5,19 @@ import {
   StyleSheet,
   TextInput,
   Text,
+  TouchableOpacity,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
 import { Button } from "@rneui/base";
+import logoClear from "../assets/logoClear.png";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const HomeScreen = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [homeScreenOn, setHomeScreen] = useState(true);
+  const [navBarVisible, setNavBar] = useState(false);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -21,44 +27,104 @@ const HomeScreen = ({ navigation }) => {
     setIsLoggedIn(false);
   };
 
+  const handleHomeScreenOn = () => {
+    setHomeScreen(false);
+  };
+
+  const handleHomeScreenOff = () => {
+    setHomeScreen(true);
+  };
+
+  const handleNavBarOn = () => {
+    setNavBar(true);
+  };
+
+  const handleNavBarOff = () => {
+    setNavBar(false);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
-      <View style={styles.loginScreenContainer}>
-        <View style={styles.loginFormView}>
-          {/* <Image style={styles.logo} source={Logo} /> */}
-          <TextInput
-            placeholder="Email"
-            placeholderColor="#c4c3cb"
-            style={styles.loginFormTextInput}
-          />
-          <TextInput
-            placeholder="Password"
-            placeholderColor="#c4c3cb"
-            style={styles.loginFormTextInput}
-            secureTextEntry={true}
-          />
-        </View>
-      </View>
-      <Text style={styles.textModify}>New to Fitfolio?</Text>
-      <Button buttonStyle={styles.buttonSwitch} title="Sign Up" />
-
-      {isLoggedIn ? (
+      {homeScreenOn ? (
         <>
-          <Button
-            buttonStyle={styles.loginButton}
-            onPress={() => {}}
-            title="Login"
-          />
-          <Button title="Sign Up" onPress={handleSignUp} />
+          {isLoggedIn ? (
+            <>
+              {/* <Image style={styles.logo} source={logoClear} /> */}
+              <View style={styles.loginScreenContainer}>
+                <View style={styles.loginFormView}>
+                  <TextInput
+                    placeholder="Email"
+                    placeholderColor="#c4c3cb"
+                    style={styles.loginFormTextInput}
+                  />
+                  <TextInput
+                    placeholder="Password"
+                    placeholderColor="#c4c3cb"
+                    style={styles.loginFormTextInput}
+                    secureTextEntry={true}
+                  />
+                  <Button
+                    buttonStyle={styles.loginButton}
+                    title="Login"
+                    onPress={handleHomeScreenOn}
+                  />
+                </View>
+              </View>
+              <Text style={styles.textModify}>New to Fitfolio?</Text>
+              <Button title="Sign Up" onPress={handleSignUp} />
+            </>
+          ) : (
+            <>
+              {/* <Image style={styles.logo} source={logoClear} /> */}
+              <View style={styles.loginScreenContainer}>
+                <View style={styles.loginFormView}>
+                  <TextInput
+                    placeholder="Email 2"
+                    placeholderColor="#c4c3cb"
+                    style={styles.loginFormTextInput}
+                  />
+                  <TextInput
+                    placeholder="Password 2"
+                    placeholderColor="#c4c3cb"
+                    style={styles.loginFormTextInput}
+                    secureTextEntry={true}
+                  />
+                  <Button
+                    buttonStyle={styles.loginButton}
+                    title="Sign Up"
+                    onPress={handleHomeScreenOn}
+                  />
+                </View>
+              </View>
+              <Text style={styles.textModify}>New to Fitfolio?</Text>
+              <Button title="Log In" onPress={handleLogin} />
+            </>
+          )}
         </>
       ) : (
         <>
-          <Button
-            buttonStyle={styles.loginButton}
-            onPress={() => {}}
-            title="Sign Up"
-          />
-          <Button title="Log In" onPress={handleLogin} />
+          <View>
+            <View style={styles.navigationBox}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 10,
+                  backgroundColor: "lightblue",
+                  borderRadius: 5,
+                }}
+              >
+                <Text>Press Me</Text>
+                <MaterialCommunityIcons
+                  name="arrow-right"
+                  size={20}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.navigationBox}></View>
+            <View style={styles.navigationBox}></View>
+          </View>
         </>
       )}
     </View>
@@ -115,6 +181,26 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonSwitch: {},
+  logo: {
+    width: 325,
+    height: 325,
+    marginStart: 13,
+    marginTop: 60,
+    marginBottom: 100,
+  },
+  navigationBox: {
+    borderWidth: 2,
+    width: 330,
+    height: 150,
+    borderRadius: 10,
+    borderColor: "white",
+    backgroundColor: "#2F2F2F",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 30,
+    marginBottom: 30,
+  },
 });
 
 export default HomeScreen;
