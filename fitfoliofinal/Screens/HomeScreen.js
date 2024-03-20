@@ -14,10 +14,18 @@ import { Button } from "@rneui/base";
 import logoClear from "../assets/logoClear.png";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../config/firebase";
+
 const HomeScreen = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [homeScreenOn, setHomeScreen] = useState(true);
   const [navBarVisible, setNavBar] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -43,6 +51,16 @@ const HomeScreen = ({ navigation }) => {
     setNavBar(false);
   };
 
+  const onLoginPress = async () => {
+    if (email && password) {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        console.log("got error: ", err.message);
+      }
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       {homeScreenOn ? (
@@ -55,18 +73,24 @@ const HomeScreen = ({ navigation }) => {
                   <TextInput
                     placeholder="Email"
                     placeholderColor="#c4c3cb"
+                    value={email}
+                    onChangeText={(value) => setEmail(value)}
                     style={styles.loginFormTextInput}
                   />
                   <TextInput
                     placeholder="Password"
                     placeholderColor="#c4c3cb"
+                    value={password}
+                    onChangeText={(value) => setPassword(value)}
                     style={styles.loginFormTextInput}
                     secureTextEntry={true}
                   />
                   <Button
                     buttonStyle={styles.loginButton}
                     title="Login"
-                    onPress={handleHomeScreenOn}
+                    onPress={() => {
+                      onLoginPress(), handleHomeScreenOn();
+                    }}
                   />
                 </View>
               </View>
@@ -105,25 +129,65 @@ const HomeScreen = ({ navigation }) => {
         <>
           <View>
             <View style={styles.navigationBox}>
+              <MaterialCommunityIcons
+                style={styles.iconStyle}
+                name="calendar-plus"
+                size={45}
+                color="white"
+              />
               <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  padding: 10,
-                  backgroundColor: "lightblue",
-                  borderRadius: 5,
+                style={styles.arrowStyle}
+                onPress={() => {
+                  navigation.navigate("Tracker");
                 }}
               >
-                <Text>Press Me</Text>
                 <MaterialCommunityIcons
-                  name="arrow-right"
-                  size={20}
-                  color="black"
+                  name="arrow-right-thin"
+                  size={70}
+                  color="#3F9DF3"
                 />
               </TouchableOpacity>
             </View>
-            <View style={styles.navigationBox}></View>
-            <View style={styles.navigationBox}></View>
+            <View style={styles.navigationBox}>
+              <MaterialCommunityIcons
+                style={styles.iconStyle}
+                name="dumbbell"
+                size={45}
+                color="white"
+              />
+              <TouchableOpacity
+                style={styles.arrowStyle}
+                onPress={() => {
+                  navigation.navigate("CuratedInfo");
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="arrow-right-thin"
+                  size={70}
+                  color="#3F9DF3"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.navigationBox}>
+              <MaterialCommunityIcons
+                style={styles.iconStyle}
+                name="food-apple"
+                size={45}
+                color="white"
+              />
+              <TouchableOpacity
+                style={styles.arrowStyle}
+                onPress={() => {
+                  navigation.navigate("Community");
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="arrow-right-thin"
+                  size={70}
+                  color="#3F9DF3"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </>
       )}
@@ -200,6 +264,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 30,
     marginBottom: 30,
+  },
+  arrowStyle: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 235,
+    // backgroundColor: "lightblue",
+    // borderRadius: 5,
+  },
+  iconStyle: {
+    marginTop: 30,
+    marginLeft: 235,
   },
 });
 
