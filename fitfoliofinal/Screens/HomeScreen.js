@@ -14,7 +14,10 @@ import { Button } from "@rneui/base";
 import logoClear from "../assets/logoClear.png";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../config/firebase";
 
 const HomeScreen = ({ navigation }) => {
