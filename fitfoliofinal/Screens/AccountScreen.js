@@ -16,25 +16,26 @@ const AccountScreen = ({ navigation }) => {
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>Name</Text>
+        <Text style={styles.name}>John Smith</Text>
+        <Text style={styles.date}>Mar 20, 2024</Text>
         <TouchableOpacity style={styles.accountButtons}>
           <Text style={styles.accountButtonsText}>
-            Edit Info. {"                                ＞"}
+            Edit Info. {"                                  ＞"}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.accountButtons}>
           <Text style={styles.accountButtonsText}>
-            Notifications {"                         ＞"}
+            Notifications {"                           ＞"}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.accountButtons}>
           <Text style={styles.accountButtonsText}>
-            Help / Contact {"                      ＞"}
+            Help / Contact {"                        ＞"}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.accountButtons}>
           <Text style={styles.accountButtonsText}>
-            Log Out {"                                 ＞"}
+            Log Out {"                                    ＞"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -53,15 +54,23 @@ const styles = StyleSheet.create({
     height: 315,
     backgroundColor: "#2D2D2D",
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: "#7A7A7A",
     alignItems: "center",
   },
   name: {
     position: "absolute",
-    top: 25,
-    left: 20,
-    fontSize: 32,
+    top: 23,
+    alignSelf: "center",
+    fontSize: 28,
+    color: "white",
+    fontWeight: "bold",
+  },
+  date: {
+    position: "absolute",
+    top: 63,
+    fontSize: 15,
+    alignSelf: "center",
     color: "white",
   },
   accountButtons: {
@@ -69,14 +78,14 @@ const styles = StyleSheet.create({
     borderColor: "#7A7A7A",
     borderTopWidth: 1,
     width: 306,
-    height: 53,
+    height: 53.5,
     borderColor: "#7A7A7A",
     backgroundColor: "transparent",
     justifyContent: "center",
   },
   accountButtonsText: {
     left: 30,
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
   },
 });
