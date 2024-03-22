@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image, Animated } from "react-native";
 import TrackerScreen from "./Screens/TrackerScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import SignUpScreen from "./Screens/SignUpScreen";
@@ -8,6 +8,7 @@ import HomeScreen from "./Screens/HomeScreen";
 import CuratedInfoScreen from "./Screens/CuratedInfoScreen";
 import CommunityScreen from "./Screens/CommunityScreen";
 import AccountScreen from "./Screens/AccountScreen";
+import Logo from "./assets/logoClear.png";
 import {
   CurrentRenderContext,
   NavigationContainer,
@@ -17,6 +18,24 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Tab = createBottomTabNavigator();
+
+const SplashScreen = () => {
+  const [fadeAnim] = useState(new Animated.Value(1));
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
+  return (
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+      <Image source={Logo} style={styles.logo} />
+    </Animated.View>
+  );
+};
 
 export const TabNavigator = () => {
   return (
@@ -101,7 +120,14 @@ export const TabNavigator = () => {
 };
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [showTabs, setShowTabs] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 3000);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -114,7 +140,28 @@ export default function App() {
         </Stack.Screen>
         {showTabs && <Stack.Screen name="Tabs" component={TabNavigator} />}
       </Stack.Navigator> */}
-      <TabNavigator></TabNavigator>
+      {showSplash ? (
+        <SplashScreen />
+      ) : (
+        <>
+          {/* Your navigation stack */}
+          <TabNavigator />
+        </>
+      )}
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logo: {
+    width: 600,
+    height: 600,
+    resizeMode: "contain",
+  },
+});
