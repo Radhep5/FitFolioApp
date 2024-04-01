@@ -39,6 +39,7 @@ const SplashScreen = () => {
 
 export const TabNavigator = () => {
   return (
+    // <Animated.View style={[{ opacity: fadeAnim }]}>
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
@@ -116,17 +117,27 @@ export const TabNavigator = () => {
         }}
       />
     </Tab.Navigator>
+    // </Animated.View>
   );
 };
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showTabs, setShowTabs] = useState(false);
+  const [fadeIn] = useState(new Animated.Value(1));
 
   useEffect(() => {
     setTimeout(() => {
       setShowSplash(false);
-    }, 3000);
+    }, 1700);
+  }, []);
+
+  useEffect(() => {
+    Animated.timing(fadeIn, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
   }, []);
 
   return (
@@ -145,6 +156,9 @@ export default function App() {
       ) : (
         <>
           {/* Your navigation stack */}
+          <Animated.View style={[styles.container2, { opacity: fadeIn }]}>
+            <View style={styles.tempRect} />
+          </Animated.View>
           <TabNavigator />
         </>
       )}
@@ -155,13 +169,24 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "#2F2F2F",
     justifyContent: "center",
-    alignItems: "center",
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: "#1E1E1E",
+    justifyContent: "center",
   },
   logo: {
-    width: 600,
-    height: 600,
+    left: 12,
+    width: 400,
+    height: 400,
     resizeMode: "contain",
+  },
+  tempRect: {
+    alignSelf: "center",
+    backgroundColor: "#1E1E1E",
+    width: 10000,
+    height: 10000,
   },
 });
