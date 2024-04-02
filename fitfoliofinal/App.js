@@ -39,7 +39,6 @@ const SplashScreen = () => {
 
 export const TabNavigator = () => {
   return (
-    // <Animated.View style={[{ opacity: fadeAnim }]}>
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
@@ -117,7 +116,6 @@ export const TabNavigator = () => {
         }}
       />
     </Tab.Navigator>
-    // </Animated.View>
   );
 };
 
@@ -146,7 +144,6 @@ export default function App() {
         <SplashScreen />
       ) : (
         <>
-          {/* Your navigation stack */}
           <View style={styles.tempRect} />
           <TabNavigator />
         </>
@@ -159,11 +156,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#2F2F2F",
-    justifyContent: "center",
-  },
-  container2: {
-    flex: 1,
-    backgroundColor: "#1E1E1E",
     justifyContent: "center",
   },
   logo: {
