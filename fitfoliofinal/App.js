@@ -124,20 +124,11 @@ export const TabNavigator = () => {
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showTabs, setShowTabs] = useState(false);
-  const [fadeIn] = useState(new Animated.Value(1));
 
   useEffect(() => {
     setTimeout(() => {
       setShowSplash(false);
     }, 1700);
-  }, []);
-
-  useEffect(() => {
-    Animated.timing(fadeIn, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
   }, []);
 
   return (
@@ -156,9 +147,7 @@ export default function App() {
       ) : (
         <>
           {/* Your navigation stack */}
-          <Animated.View style={[styles.container2, { opacity: fadeIn }]}>
-            <View style={styles.tempRect} />
-          </Animated.View>
+          <View style={styles.tempRect} />
           <TabNavigator />
         </>
       )}
