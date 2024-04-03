@@ -20,18 +20,20 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 const Tab = createBottomTabNavigator();
 
 const SplashScreen = () => {
-  const [fadeAnim] = useState(new Animated.Value(1));
+  const [zoomAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
+    Animated.timing(zoomAnimation, {
+      toValue: 200,
       duration: 2000,
       useNativeDriver: true,
     }).start();
   }, []);
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <Animated.View
+      style={[styles.container, { transform: [{ scale: zoomAnimation }] }]}
+    >
       <Image source={Logo} style={styles.logo} />
     </Animated.View>
   );
