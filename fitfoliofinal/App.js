@@ -23,17 +23,19 @@ const SplashScreen = () => {
   const [zoomAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
-    Animated.timing(zoomAnimation, {
-      toValue: 200,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
+    const delay = 1000;
+
+    setTimeout(() => {
+      Animated.timing(zoomAnimation, {
+        toValue: 0,
+        duration: 3000,
+        useNativeDriver: true,
+      }).start();
+    }, delay);
   }, []);
 
   return (
-    <Animated.View
-      style={[styles.container, { transform: [{ scale: zoomAnimation }] }]}
-    >
+    <Animated.View style={[styles.container, { opacity: zoomAnimation }]}>
       <Image source={Logo} style={styles.logo} />
     </Animated.View>
   );
@@ -124,11 +126,22 @@ export const TabNavigator = () => {
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [showTabs, setShowTabs] = useState(false);
+  const [showRect, setShowRect] = useState(true);
+  const [fadeRectAnimation] = useState(new Animated.Value(1));
 
   useEffect(() => {
     setTimeout(() => {
       setShowSplash(false);
-    }, 1700);
+    }, 4000);
+
+    setTimeout(() => {
+      setShowRect(false);
+      Animated.timing(fadeRectAnimation, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }, 4500);
   }, []);
 
   return (
@@ -146,7 +159,11 @@ export default function App() {
         <SplashScreen />
       ) : (
         <>
-          <View style={styles.tempRect} />
+          {showRect && (
+            <Animated.View
+              style={[styles.tempRect, { opacity: fadeRectAnimation }]}
+            />
+          )}
           <TabNavigator />
         </>
       )}
