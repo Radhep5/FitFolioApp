@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image, Animated } from "react-native";
 import TrackerScreen from "./Screens/TrackerScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import SignUpScreen from "./Screens/SignUpScreen";
@@ -8,6 +8,7 @@ import HomeScreen from "./Screens/HomeScreen";
 import CuratedInfoScreen from "./Screens/CuratedInfoScreen";
 import CommunityScreen from "./Screens/CommunityScreen";
 import AccountScreen from "./Screens/AccountScreen";
+import Logo from "./assets/logoClear.png";
 import {
   CurrentRenderContext,
   NavigationContainer,
@@ -17,6 +18,28 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const Tab = createBottomTabNavigator();
+
+const SplashScreen = () => {
+  const [zoomAnimation] = useState(new Animated.Value(1));
+
+  useEffect(() => {
+    const delay = 1000;
+
+    setTimeout(() => {
+      Animated.timing(zoomAnimation, {
+        toValue: 0,
+        duration: 3000,
+        useNativeDriver: true,
+      }).start();
+    }, delay);
+  }, []);
+
+  return (
+    <Animated.View style={[styles.container, { opacity: zoomAnimation }]}>
+      <Image source={Logo} style={styles.logo} />
+    </Animated.View>
+  );
+};
 
 export const TabNavigator = () => {
   return (
@@ -101,7 +124,25 @@ export const TabNavigator = () => {
 };
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [showTabs, setShowTabs] = useState(false);
+  const [showRect, setShowRect] = useState(true);
+  const [fadeRectAnimation] = useState(new Animated.Value(1));
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 4000);
+
+    setTimeout(() => {
+      setShowRect(false);
+      Animated.timing(fadeRectAnimation, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    }, 4500);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -114,7 +155,38 @@ export default function App() {
         </Stack.Screen>
         {showTabs && <Stack.Screen name="Tabs" component={TabNavigator} />}
       </Stack.Navigator> */}
-      <TabNavigator></TabNavigator>
+      {showSplash ? (
+        <SplashScreen />
+      ) : (
+        <>
+          {showRect && (
+            <Animated.View
+              style={[styles.tempRect, { opacity: fadeRectAnimation }]}
+            />
+          )}
+          <TabNavigator />
+        </>
+      )}
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#2F2F2F",
+    justifyContent: "center",
+  },
+  logo: {
+    left: 12,
+    width: 400,
+    height: 400,
+    resizeMode: "contain",
+  },
+  tempRect: {
+    alignSelf: "center",
+    backgroundColor: "#1E1E1E",
+    width: 10000,
+    height: 10000,
+  },
+});
