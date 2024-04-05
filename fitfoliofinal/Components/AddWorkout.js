@@ -69,6 +69,12 @@ const AddWorkoutButton = ({ title, onPress }) => {
     setLBS([]);
   };
 
+  const handleDeleteWorkout = (index) => {
+    const updatedWorkoutHistory = [...workoutHistory];
+    updatedWorkoutHistory.splice(index, 1); // Remove the item at the specified index
+    setWorkoutHistory(updatedWorkoutHistory);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent}>
@@ -77,6 +83,9 @@ const AddWorkoutButton = ({ title, onPress }) => {
             <View key={index} style={styles.workoutBox}>
               <Text style={styles.historyTitle}>{workout.name}</Text>
               <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
+              <TouchableOpacity onPress={() => handleDeleteWorkout(index)}>
+                <Text>Delete</Text>
+              </TouchableOpacity>
               <Text style={styles.historyHeading}>
                 {workout.repetitions.join("  | |  ")}
               </Text>
