@@ -84,7 +84,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
               <Text style={styles.historyTitle}>{workout.name}</Text>
               <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
               <TouchableOpacity onPress={() => handleDeleteWorkout(index)}>
-                <Text>Delete</Text>
+                <Text>🗑️</Text>
               </TouchableOpacity>
               <Text style={styles.historyHeading}>
                 {workout.repetitions.join("  | |  ")}
