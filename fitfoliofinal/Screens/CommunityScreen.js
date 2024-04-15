@@ -1,11 +1,31 @@
 import React, { useState } from "react";
+import AddWorkoutButton from "../Components/AddComment";
 
-import { View, StyleSheet } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+  Image,
+  StyleSheet,
+} from "react-native";
+import AddCommentButton from "../Components/AddComment";
 
 const CommunityScreen = ({ navigation }) => {
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
-      <View style={styles.testBox}></View>
+      <View>
+        <Text style={styles.title}>🍴Meals</Text>
+      </View>
+      <View style={styles.underline}>
+        <AddCommentButton
+          title="+ Create Post"
+          onPress={() => console.log("Button pressed")}
+        />
+      </View>
     </View>
   );
 };
@@ -13,8 +33,14 @@ const CommunityScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  title: {
+    top: 50,
+    left: 30,
+    alignSelf: "left",
+    fontSize: 32,
+    color: "white",
+    zIndex: 2,
   },
 });
 
