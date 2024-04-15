@@ -83,8 +83,11 @@ const AddWorkoutButton = ({ title, onPress }) => {
             <View key={index} style={styles.workoutBox}>
               <Text style={styles.historyTitle}>{workout.name}</Text>
               <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
-              <TouchableOpacity onPress={() => handleDeleteWorkout(index)}>
-                <Text>🗑️</Text>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDeleteWorkout(index)}
+              >
+                <Text style={styles.deleteIcon}>🗑️</Text>
               </TouchableOpacity>
               <Text style={styles.historyHeading}>
                 {workout.repetitions.join("  | |  ")}
@@ -283,6 +286,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     marginBottom: 25,
+  },
+  deleteButton: {
+    position: "absolute",
+    bottom: 7,
+    left: 15,
+    padding: 5,
+    borderRadius: 5,
+  },
+  deleteIcon: {
+    fontSize: 20,
   },
 });
 
