@@ -71,7 +71,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
   const handleDeleteWorkout = (index) => {
     const updatedWorkoutHistory = [...workoutHistory];
-    updatedWorkoutHistory.splice(index, 1); // Remove the item at the specified index
+    updatedWorkoutHistory.splice(index, 1);
     setWorkoutHistory(updatedWorkoutHistory);
   };
 
@@ -194,17 +194,17 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    backgroundColor: "#007AFF", // Adjust button color as needed
+    backgroundColor: "#007AFF",
     borderRadius: 5,
   },
   temp: {
     padding: 10,
-    backgroundColor: "#007AFF", // Adjust button color as needed
+    backgroundColor: "#007AFF",
     borderRadius: 5,
     alignSelf: "flex-start",
   },
   buttonText: {
-    color: "#fff", // Adjust text color as needed
+    color: "#fff",
     fontSize: 16,
   },
   addButton: {
