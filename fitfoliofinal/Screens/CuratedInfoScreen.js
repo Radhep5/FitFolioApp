@@ -1,19 +1,25 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  Button,
+} from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
 
 const CuratedInfoScreen = ({ navigation }) => {
   const [selected, setSelected] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   const data = [
-    { key: "1", value: "Mobiles" },
-    { key: "2", value: "Appliances" },
-    { key: "3", value: "Cameras" },
-    { key: "4", value: "Computers" },
-    { key: "5", value: "Vegetables" },
-    { key: "6", value: "Diary Products" },
-    { key: "7", value: "Drinks" },
+    { key: "1", value: "Workouts" },
+    { key: "2", value: "Meals" },
+    { key: "3", value: "Equipment" },
+    { key: "4", value: "Gyms" },
+    { key: "5", value: "Supplements" },
   ];
 
   const runSelectTopic = () => {
@@ -26,15 +32,13 @@ const CuratedInfoScreen = ({ navigation }) => {
   };
 
   const getWorkouts = async (event) => {
-    const axios = require("axios");
-
     const options = {
       method: "GET",
-      url: "https://exercisedb.p.rapidapi.com/exercises",
-      params: { limit: "10" },
+      url: "https://work-out-api1.p.rapidapi.com/search",
+      params: { Muscles: "biceps" },
       headers: {
         "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
-        "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
+        "X-RapidAPI-Host": "work-out-api1.p.rapidapi.com",
       },
     };
 
@@ -62,19 +66,178 @@ const CuratedInfoScreen = ({ navigation }) => {
         />
       </View>
       <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
-        <View style={[styles.infoBox]}></View>
-        <TouchableOpacity
-          style={styles.arrowStyle}
-          onPress={() => {
-            getWorkouts();
-          }}
-        >
-          <MaterialCommunityIcons
-            name="arrow-right-thin"
-            size={70}
-            color="#3F9DF3"
-          />
-        </TouchableOpacity>
+        <View style={[styles.infoBox]}>
+          <TouchableOpacity
+            style={styles.arrowStyle}
+            onPress={() => {
+              getWorkouts();
+              setModalVisible(true);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={70}
+              color="#3F9DF3"
+            />
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>This is a popup modal!</Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+        </View>
+        <View style={[styles.infoBox]}>
+          <TouchableOpacity
+            style={styles.arrowStyle}
+            onPress={() => {
+              getWorkouts();
+              setModalVisible(true);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={70}
+              color="#3F9DF3"
+            />
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>This is a popup modal!</Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+        </View>
+        <View style={[styles.infoBox]}>
+          <TouchableOpacity
+            style={styles.arrowStyle}
+            onPress={() => {
+              getWorkouts();
+              setModalVisible(true);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={70}
+              color="#3F9DF3"
+            />
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>This is a popup modal!</Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+        </View>
+        <View style={[styles.infoBox]}>
+          <TouchableOpacity
+            style={styles.arrowStyle}
+            onPress={() => {
+              getWorkouts();
+              setModalVisible(true);
+            }}
+          >
+            <MaterialCommunityIcons
+              name="arrow-right-thin"
+              size={70}
+              color="#3F9DF3"
+            />
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>This is a popup modal!</Text>
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </View>
+          </Modal>
+        </View>
       </View>
     </View>
   );
@@ -109,6 +272,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     marginBottom: 25,
+  },
+  arrowStyle: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 235,
+    // backgroundColor: "lightblue",
+    // borderRadius: 5,
   },
 });
 
