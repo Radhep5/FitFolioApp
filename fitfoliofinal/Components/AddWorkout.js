@@ -14,14 +14,14 @@ import {
   ScrollView,
 } from "react-native";
 
-const AddWorkoutButton = ({ title, onPress }) => {
+const AddWorkoutButton = ({ title, date, onPress }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
   const [repetitions, setRepetitions] = useState([]);
   const [lbs, setLBS] = useState([]);
 
-  const [workoutHistory, setWorkoutHistory] = useState([]);
+  const [workouts, setWorkouts] = useState({});
 
   const handleAddRepetitionsSets = () => {
     const newRepetitions = [...repetitions, ""];
@@ -32,6 +32,11 @@ const AddWorkoutButton = ({ title, onPress }) => {
   };
 
   const handleSaveWorkout = () => {
+    if (!date) {
+      console.error("Error saving workout: Date is null");
+      return; // Exit the function early if date is null
+    }
+
     const repetitionsWithLabel = repetitions.map((rep) => `${rep} Reps`);
     const lbsWithLabel = lbs.map((rep) => `${rep} LBS`);
 
@@ -41,7 +46,11 @@ const AddWorkoutButton = ({ title, onPress }) => {
       repetitions: repetitionsWithLabel,
       lbs: lbsWithLabel,
     };
-    setWorkoutHistory([...workoutHistory, workout]);
+    const updatedWorkouts = { ...workouts };
+    updatedWorkouts[date] = updatedWorkouts[date] || [];
+    updatedWorkouts[date].push(workout);
+    setWorkouts(updatedWorkouts);
+
     console.log("Workout Name:", workoutName);
     console.log("Sets:", sets);
     console.log("Repetitions:", repetitions);
@@ -49,12 +58,10 @@ const AddWorkoutButton = ({ title, onPress }) => {
 
     const setDataInFirestore = async () => {
       try {
-        workoutHistory.forEach(async (workout, index) => {
-          const docRef = doc(trackerDB, "user", "date");
-          await setDoc(docRef, workout);
-        });
+        const docRef = doc(trackerDB, "user", date); // Assuming date is the document ID
+        await setDoc(docRef, updatedWorkouts[date]);
       } catch (error) {
-        console.error("error", error);
+        console.error("Error saving workout:", error);
       }
     };
     setDataInFirestore();
@@ -70,33 +77,34 @@ const AddWorkoutButton = ({ title, onPress }) => {
   };
 
   const handleDeleteWorkout = (index) => {
-    const updatedWorkoutHistory = [...workoutHistory];
-    updatedWorkoutHistory.splice(index, 1);
-    setWorkoutHistory(updatedWorkoutHistory);
+    const updatedWorkouts = { ...workouts };
+    updatedWorkouts[date].splice(index, 1);
+    setWorkouts(updatedWorkouts);
   };
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.workoutHistoryContainer}>
-          {workoutHistory.map((workout, index) => (
-            <View key={index} style={styles.workoutBox}>
-              <Text style={styles.historyTitle}>{workout.name}</Text>
-              <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeleteWorkout(index)}
-              >
-                <Text style={styles.deleteIcon}>🗑️</Text>
-              </TouchableOpacity>
-              <Text style={styles.historyHeading}>
-                {workout.repetitions.join("  | |  ")}
-              </Text>
-              <Text style={styles.historyHeading}>
-                {workout.lbs.join("  | |  ")}
-              </Text>
-            </View>
-          ))}
+          {workouts[date] &&
+            workouts[date].map((workout, index) => (
+              <View key={index} style={styles.workoutBox}>
+                <Text style={styles.historyTitle}>{workout.name}</Text>
+                <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteWorkout(index)}
+                >
+                  <Text style={styles.deleteIcon}>🗑️</Text>
+                </TouchableOpacity>
+                <Text style={styles.historyHeading}>
+                  {workout.repetitions.join("  | |  ")}
+                </Text>
+                <Text style={styles.historyHeading}>
+                  {workout.lbs.join("  | |  ")}
+                </Text>
+              </View>
+            ))}
           <TouchableOpacity
             style={styles.buttonClear}
             onPress={() => setIsVisible(true)}

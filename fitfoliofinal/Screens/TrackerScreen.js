@@ -15,15 +15,18 @@ import {
 } from "react-native";
 
 const TrackerScreen = ({ navigation }) => {
+  const [selectedDate, setSelectedDate] = useState(null);
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.calendarPad}>
-        <Calendar />
+        <Calendar onSelectDate={(date) => setSelectedDate(date)} />
       </View>
       <View>
         <AddWorkoutButton
           title="+"
-          onPress={() => console.log("Button pressed")}
+          date={selectedDate}
+          onPress={() => console.log("Date" + date)}
         />
       </View>
     </View>
