@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
+import { dateSend } from "./Calendar.js";
 import {
   View,
   Text,
@@ -31,7 +32,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
     setSets(newRepetitions.length);
   };
 
-  const handleSaveWorkout = () => {
+  const handleSaveWorkout = async () => {
     const repetitionsWithLabel = repetitions.map((rep) => `${rep} Reps`);
     const lbsWithLabel = lbs.map((rep) => `${rep} LBS`);
 
@@ -47,17 +48,19 @@ const AddWorkoutButton = ({ title, onPress }) => {
     console.log("Repetitions:", repetitions);
     console.log("LBS:", lbs);
 
-    const setDataInFirestore = async () => {
-      try {
-        workoutHistory.forEach(async (workout, index) => {
-          const docRef = doc(trackerDB, "user", "date");
-          await setDoc(docRef, workout);
-        });
-      } catch (error) {
-        console.error("error", error);
-      }
-    };
-    setDataInFirestore();
+    const updatedWorkoutHistory = [...workoutHistory, workout];
+    setWorkoutHistory(updatedWorkoutHistory);
+
+    try {
+      console.log(dateSend);
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const datesCollectionRef = collection(userDocRef, "dates");
+      const dateDocRef = doc(datesCollectionRef, dateSend);
+      await setDoc(dateDocRef, workout);
+      console.log("Stored workout successfully:", workout);
+    } catch (error) {
+      console.error("Error storing workout:", error);
+    }
   };
 
   const handleSaveWorkoutAndCloseModal = () => {

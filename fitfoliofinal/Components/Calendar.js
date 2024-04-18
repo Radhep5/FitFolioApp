@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Button, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+let dateSend = "";
 
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
@@ -12,6 +13,7 @@ const Calendar = () => {
     const currentDate = selectedDate || date;
     setShow(Platform.os === "ios");
     setDate(currentDate);
+    dateSend = date;
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -51,5 +53,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
+
+export { dateSend };
 
 export default Calendar;
