@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, Button, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import CurrentDateComponent from "./CurrentDate.js";
 let dateSend = "";
 
 const Calendar = () => {
@@ -13,7 +14,6 @@ const Calendar = () => {
     const currentDate = selectedDate || date;
     setShow(Platform.os === "ios");
     setDate(currentDate);
-    dateSend = date;
 
     let tempDate = new Date(currentDate);
     let fDate =
@@ -26,6 +26,20 @@ const Calendar = () => {
     setText(fDate);
 
     console.log(fDate);
+    if (fDate === "") {
+      const dateString = CurrentDateComponent();
+      if (dateString) {
+        dateSend = dateString;
+      } else {
+        console.error(
+          "CurrentDateComponent did not return a valid date string"
+        );
+      }
+    } else {
+      dateSend = fDate;
+      console.log("Worked");
+    }
+    console.log(dateSend);
   };
 
   return (
