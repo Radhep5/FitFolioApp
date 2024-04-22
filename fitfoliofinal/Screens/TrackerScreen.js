@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "../Components/Calendar";
 import AddWorkoutButton from "../Components/AddWorkout";
 
@@ -15,15 +15,18 @@ import {
 } from "react-native";
 
 const TrackerScreen = ({ navigation }) => {
+  const [dateSend, setDateSend] = useState("");
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.calendarPad}>
-        <Calendar />
+        <Calendar setDateSend={setDateSend} />
       </View>
       <View>
         <AddWorkoutButton
           title="+"
           onPress={() => console.log("Button pressed")}
+          dateSend={dateSend}
         />
       </View>
     </View>
