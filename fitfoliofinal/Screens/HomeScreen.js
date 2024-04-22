@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   View,
@@ -61,6 +61,38 @@ const HomeScreen = ({ navigation }) => {
         console.log("got error: ", err.message);
       }
     }
+  };
+
+  const AuthListener = async () => {
+    useEffect(() => {
+      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in
+          const userEmail = user.email;
+
+          // Create a document in Firestore under "users" collection with the email
+          trackerDB
+            .collection("user")
+            .doc(user.uid)
+            .set({
+              email: userEmail,
+            })
+            .then(() => {
+              console.log("User document created in Firestore");
+            })
+            .catch((error) => {
+              console.error("Error creating user document: ", error);
+            });
+        } else {
+          // No user is signed in
+          console.log("No user signed in");
+        }
+      });
+
+      return () => unsubscribe(); // Unsubscribe from the auth state listener when the component unmounts
+    }, []);
+
+    return null; // This component doesn't render anything
   };
 
   // const onLoginPress = async () => {
@@ -154,7 +186,7 @@ const HomeScreen = ({ navigation }) => {
                     buttonStyle={styles.loginButton}
                     title="Sign Up"
                     onPress={() => {
-                      onSignUpPress(), handleHomeScreenOn();
+                      onSignUpPress(), handleHomeScreenOn(), AuthListener();
                     }}
                   />
                 </View>
