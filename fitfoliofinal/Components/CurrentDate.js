@@ -2,10 +2,11 @@ import React from "react";
 
 const CurrentDateComponent = () => {
   const currentDate = new Date();
-  const dateString = currentDate.toDateString();
-  const [dayOfWeek, month, day, year] = dateString.split(" ");
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+  const year = currentDate.getFullYear();
 
-  const formattedDateString = `${month} ${day}, ${year}`;
+  const formattedDateString = `${month}-${day}-${year}`;
 
   return formattedDateString;
 };
