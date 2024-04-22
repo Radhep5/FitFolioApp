@@ -69,6 +69,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
       const updatedWorkouts = [...existingWorkouts, workout];
       await setDoc(dateDocRef, { workouts: updatedWorkouts });
       console.log("Stored workout successfully:", workout);
+      setForceUpdate(!forceUpdate);
     } catch (error) {
       console.error("Error storing workout:", error);
     }
