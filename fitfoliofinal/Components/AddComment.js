@@ -25,7 +25,7 @@ const AddCommentButton = ({ title, onPress }) => {
 
   const [commentHistory, setCommentHistory] = useState([]);
 
-  const handleSaveComment = () => {
+  const handleSaveComment = async () => {
     const comment = {
       text: paragraph,
       date: dateString,
@@ -33,6 +33,27 @@ const AddCommentButton = ({ title, onPress }) => {
     setCommentHistory([...commentHistory, comment]);
     console.log("Comment:", paragraph);
     console.log("Date:", dateString);
+
+    const updatedCommentHistory = [...commentHistory, comment];
+    setWorkoutHistory(updatedCommentHistory);
+
+    try {
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      const commentDocSnapshot = await getDoc(commentDocRef);
+      const existingComments = commentDocSnapshot.exists()
+        ? commentDocSnapshot.data().comments || []
+        : [];
+
+      const updatedComments = [...existingComments, comment];
+      await setDoc(commentDocRef, { comments: updatedComments });
+      console.log("Stored comment successfully:", comment);
+      setForceUpdate(!forceUpdate);
+    } catch (error) {
+      console.error("Error storing comment:", error);
+    }
   };
 
   const handleSaveCommentAndCloseModal = () => {
