@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Button, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import CurrentDateComponent from "./CurrentDate.js";
-let dateSend = "";
 
-const Calendar = () => {
+const Calendar = ({ setDateSend }) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [text, setText] = useState("Empty");
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setDateSendToCurrentDate();
+  }, []);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -19,27 +22,21 @@ const Calendar = () => {
     let fDate =
       tempDate.getMonth() +
       1 +
-      "/" +
+      "-" +
       tempDate.getDate() +
-      "/" +
+      "-" +
       tempDate.getFullYear();
     setText(fDate);
+    setDateSend(fDate);
+  };
 
-    console.log(fDate);
-    if (fDate === "") {
-      const dateString = CurrentDateComponent();
-      if (dateString) {
-        dateSend = dateString;
-      } else {
-        console.error(
-          "CurrentDateComponent did not return a valid date string"
-        );
-      }
+  const setDateSendToCurrentDate = () => {
+    const dateString = CurrentDateComponent();
+    if (dateString) {
+      setDateSend(dateString);
     } else {
-      dateSend = fDate;
-      console.log("Worked");
+      console.error("CurrentDateComponent did not return a valid date string");
     }
-    console.log(dateSend);
   };
 
   return (
@@ -67,7 +64,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-
-export { dateSend };
 
 export default Calendar;

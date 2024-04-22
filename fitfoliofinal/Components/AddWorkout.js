@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
-import { dateSend } from "./Calendar.js";
 import {
   View,
   Text,
@@ -15,14 +14,19 @@ import {
   ScrollView,
 } from "react-native";
 
-const AddWorkoutButton = ({ title, onPress }) => {
+const AddWorkoutButton = ({ title, onPress, dateSend }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
   const [repetitions, setRepetitions] = useState([]);
   const [lbs, setLBS] = useState([]);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const [workoutHistory, setWorkoutHistory] = useState([]);
+
+  useEffect(() => {
+    console.log("Updated: " + dateSend);
+  }, [dateSend]);
 
   const handleAddRepetitionsSets = () => {
     const newRepetitions = [...repetitions, ""];
@@ -47,16 +51,23 @@ const AddWorkoutButton = ({ title, onPress }) => {
     console.log("Sets:", sets);
     console.log("Repetitions:", repetitions);
     console.log("LBS:", lbs);
+    console.log("Date:", dateSend);
 
     const updatedWorkoutHistory = [...workoutHistory, workout];
     setWorkoutHistory(updatedWorkoutHistory);
 
     try {
-      console.log(dateSend);
       const userDocRef = doc(trackerDB, "user", "userdocID");
       const datesCollectionRef = collection(userDocRef, "dates");
       const dateDocRef = doc(datesCollectionRef, dateSend);
-      await setDoc(dateDocRef, workout);
+
+      const dateDocSnapshot = await getDoc(dateDocRef);
+      const existingWorkouts = dateDocSnapshot.exists()
+        ? dateDocSnapshot.data().workouts || []
+        : [];
+
+      const updatedWorkouts = [...existingWorkouts, workout];
+      await setDoc(dateDocRef, { workouts: updatedWorkouts });
       console.log("Stored workout successfully:", workout);
     } catch (error) {
       console.error("Error storing workout:", error);
@@ -72,20 +83,58 @@ const AddWorkoutButton = ({ title, onPress }) => {
     setLBS([]);
   };
 
-  const handleDeleteWorkout = (index) => {
+  const handleDeleteWorkout = async (index) => {
     const updatedWorkoutHistory = [...workoutHistory];
     updatedWorkoutHistory.splice(index, 1);
     setWorkoutHistory(updatedWorkoutHistory);
+
+    try {
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const datesCollectionRef = collection(userDocRef, "dates");
+      const dateDocRef = doc(datesCollectionRef, dateSend);
+
+      const dateDocSnapshot = await getDoc(dateDocRef);
+      const workoutsData = dateDocSnapshot.data()?.workouts || [];
+      workoutsData.splice(index, 1);
+
+      await setDoc(dateDocRef, { workouts: workoutsData });
+      setForceUpdate(!forceUpdate);
+      console.log("Workout deleted successfully");
+    } catch (error) {
+      console.error("Error deleting workout:", error);
+    }
   };
+
+  const [fetchedWorkouts, setFetchedWorkouts] = useState([]);
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      try {
+        const userDocRef = doc(trackerDB, "user", "userdocID");
+        const datesCollectionRef = collection(userDocRef, "dates");
+        const dateDocRef = doc(datesCollectionRef, dateSend);
+
+        const dateDocSnapshot = await getDoc(dateDocRef);
+        const workoutsData = dateDocSnapshot.data()?.workouts || [];
+
+        setFetchedWorkouts(workoutsData);
+      } catch (error) {
+        console.error("Error fetching workouts:", error);
+      }
+    };
+
+    fetchWorkouts();
+  }, [dateSend, forceUpdate]);
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.workoutHistoryContainer}>
-          {workoutHistory.map((workout, index) => (
+          {fetchedWorkouts.map((fetchedWorkout, index) => (
             <View key={index} style={styles.workoutBox}>
-              <Text style={styles.historyTitle}>{workout.name}</Text>
-              <Text style={styles.historySets}>{workout.sets} Set(s)</Text>
+              <Text style={styles.historyTitle}>{fetchedWorkout.name}</Text>
+              <Text style={styles.historySets}>
+                {fetchedWorkout.sets} Set(s)
+              </Text>
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDeleteWorkout(index)}
@@ -93,10 +142,10 @@ const AddWorkoutButton = ({ title, onPress }) => {
                 <Text style={styles.deleteIcon}>🗑️</Text>
               </TouchableOpacity>
               <Text style={styles.historyHeading}>
-                {workout.repetitions.join("  | |  ")}
+                {fetchedWorkout.repetitions.join("  | |  ")}
               </Text>
               <Text style={styles.historyHeading}>
-                {workout.lbs.join("  | |  ")}
+                {fetchedWorkout.lbs.join("  | |  ")}
               </Text>
             </View>
           ))}
