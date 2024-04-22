@@ -19,6 +19,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { firebase, trackerDB } from "../config/firebase.js";
 
 const HomeScreen = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
     setNavBar(false);
   };
 
-  const onLoginPress = async () => {
+  const onSignUpPress = async () => {
     if (email && password) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
@@ -60,6 +62,37 @@ const HomeScreen = ({ navigation }) => {
       }
     }
   };
+
+  // const onLoginPress = async () => {
+  //   firebase
+  //     .auth()
+  //     .createUserWithEmailAndPassword(email, password)
+  //     .then((userCredential) => {
+  //       // Signed up successfully
+  //       const user = userCredential.user;
+
+  //       // Create a document in Firestore for the user
+  //       trackerDB
+  //         .collection("user")
+  //         .doc(user.uid)
+  //         .set({
+  //           email: user.email,
+  //           // You can add more user information here if needed
+  //         })
+  //         .then(() => {
+  //           console.log("User data added to Firestore");
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error adding user data to Firestore: ", error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       // Handle errors here
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       Alert.alert("Error", errorMessage);
+  //     });
+  // };
 
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
@@ -89,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
                     buttonStyle={styles.loginButton}
                     title="Login"
                     onPress={() => {
-                      onLoginPress(), handleHomeScreenOn();
+                      handleHomeScreenOn();
                     }}
                   />
                 </View>
@@ -106,21 +139,27 @@ const HomeScreen = ({ navigation }) => {
                     placeholder="Email 2"
                     placeholderColor="#c4c3cb"
                     style={styles.loginFormTextInput}
+                    value={email}
+                    onChangeText={(value) => setEmail(value)}
                   />
                   <TextInput
                     placeholder="Password 2"
                     placeholderColor="#c4c3cb"
                     style={styles.loginFormTextInput}
+                    value={password}
+                    onChangeText={(value) => setPassword(value)}
                     secureTextEntry={true}
                   />
                   <Button
                     buttonStyle={styles.loginButton}
                     title="Sign Up"
-                    onPress={handleHomeScreenOn}
+                    onPress={() => {
+                      onSignUpPress(), handleHomeScreenOn();
+                    }}
                   />
                 </View>
               </View>
-              <Text style={styles.textModify}>New to Fitfolio?</Text>
+              <Text style={styles.textModify}>Already a User?</Text>
               <Button title="Log In" onPress={handleLogin} />
             </>
           )}
@@ -276,6 +315,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginLeft: 235,
   },
+  header: {},
 });
 
 export default HomeScreen;

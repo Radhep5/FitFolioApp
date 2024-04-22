@@ -18,20 +18,89 @@ const CuratedInfoScreen = ({ navigation }) => {
     { key: "1", value: "Workouts" },
     { key: "2", value: "Meals" },
     { key: "3", value: "Equipment" },
-    { key: "4", value: "Gyms" },
-    { key: "5", value: "Supplements" },
+    { key: "4", value: "Supplements" },
   ];
 
   const runSelectTopic = () => {
-    if (selected == data[0].value) {
-      print("hi");
+    console.log("working");
+    if (selected == data[0].key) {
+      console.log("hi");
+      getWorkouts();
     }
-    if (selected == data[0].value) {
-      print("hi2");
+    if (selected == data[1].key) {
+      console.log("hi2");
+      getMeals();
+    }
+    if (selected == data[2].key) {
+    }
+    if (selected == data[3].key) {
     }
   };
 
+  //API #1
   const getWorkouts = async (event) => {
+    const options = {
+      method: "GET",
+      url: "https://work-out-api1.p.rapidapi.com/search",
+      params: { Muscles: "biceps" },
+      headers: {
+        "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
+        "X-RapidAPI-Host": "work-out-api1.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //API #2
+  const getMeals = async (event) => {
+    const options = {
+      method: "GET",
+      url: "https://tasty.p.rapidapi.com/recipes/auto-complete",
+      params: {
+        prefix: "chicken soup",
+      },
+      headers: {
+        "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //API #3
+  const getSupplement = async (event) => {
+    const options = {
+      method: "GET",
+      url: "https://work-out-api1.p.rapidapi.com/search",
+      params: { Muscles: "biceps" },
+      headers: {
+        "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
+        "X-RapidAPI-Host": "work-out-api1.p.rapidapi.com",
+      },
+    };
+
+    try {
+      const response = await axios.request(options);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //API #4
+  const getEquipment = async (event) => {
     const options = {
       method: "GET",
       url: "https://work-out-api1.p.rapidapi.com/search",
@@ -64,6 +133,7 @@ const CuratedInfoScreen = ({ navigation }) => {
           searchPlaceholder="Choose topic"
           onSelect={runSelectTopic}
         />
+        <Text>HI</Text>
       </View>
       <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
         <View style={[styles.infoBox]}>

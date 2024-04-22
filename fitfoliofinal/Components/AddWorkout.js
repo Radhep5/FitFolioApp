@@ -51,7 +51,7 @@ const AddWorkoutButton = ({ title, onPress }) => {
       try {
         workoutHistory.forEach(async (workout, index) => {
           const docRef = doc(trackerDB, "user", "date");
-          await setDoc(docRef, workout);
+          await (docRef, workout);
         });
       } catch (error) {
         console.error("error", error);
