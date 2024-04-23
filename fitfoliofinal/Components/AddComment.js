@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
 import CurrentDateComponent from "./CurrentDate.js";
 import {
@@ -22,6 +22,7 @@ const AddCommentButton = ({ title, onPress }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [paragraph, setParagraph] = useState("");
   const dateString = CurrentDateComponent();
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   const [commentHistory, setCommentHistory] = useState([]);
 
@@ -35,7 +36,7 @@ const AddCommentButton = ({ title, onPress }) => {
     console.log("Date:", dateString);
 
     const updatedCommentHistory = [...commentHistory, comment];
-    setWorkoutHistory(updatedCommentHistory);
+    setCommentHistory(updatedCommentHistory);
 
     try {
       const userDocRef = doc(trackerDB, "user", "userdocID");
@@ -62,11 +63,47 @@ const AddCommentButton = ({ title, onPress }) => {
     setParagraph("");
   };
 
-  const handleDeleteComment = (index) => {
+  const handleDeleteComment = async (index) => {
     const updatedCommentHistory = [...commentHistory];
     updatedCommentHistory.splice(index, 1);
     setCommentHistory(updatedCommentHistory);
+
+    try {
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      const commentDocSnapshot = await getDoc(commentDocRef);
+      const commentsData = commentDocSnapshot.data()?.comments || [];
+      commentsData.splice(index, 1);
+
+      await setDoc(commentDocRef, { comments: commentsData });
+      setForceUpdate(!forceUpdate);
+      console.log("Comment deleted successfully");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
+
+  const [fetchedComments, setFetchedComments] = useState([]);
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const userDocRef = doc(trackerDB, "user", "userdocID");
+        const commentsCollectionRef = collection(userDocRef, "comments");
+        const commentDocRef = doc(commentsCollectionRef, dateString);
+
+        const commentDocSnapshot = await getDoc(commentDocRef);
+        const commentsData = commentDocSnapshot.data()?.comments || [];
+
+        setFetchedComments(commentsData);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchComments();
+  }, [forceUpdate]);
 
   return (
     <View style={styles.container}>
@@ -79,11 +116,11 @@ const AddCommentButton = ({ title, onPress }) => {
       <View style={styles.underline}></View>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.commentHistoryContainer}>
-          {commentHistory.map((comment, index) => (
+          {fetchedComments.map((fetchedComment, index) => (
             <View key={index} style={styles.commentBox}>
               <Text style={styles.historyTitle}>User Name Here</Text>
-              <Text style={styles.historyComment}>"{comment.text}"</Text>
-              <Text style={styles.historyDate}>{comment.date}</Text>
+              <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
+              <Text style={styles.historyDate}>{fetchedComment.date}</Text>
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDeleteComment(index)}
