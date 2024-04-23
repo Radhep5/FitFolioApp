@@ -121,6 +121,12 @@ const AddCommentButton = ({ title, onPress }) => {
               <Text style={styles.historyTitle}>User Name Here</Text>
               <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
               <Text style={styles.historyDate}>{fetchedComment.date}</Text>
+              <TouchableOpacity style={styles.upButton}>
+                <Text style={styles.upIcon}>👍</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.downButton}>
+                <Text style={styles.downIcon}>👍</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDeleteComment(index)}
@@ -280,7 +286,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     backgroundColor: "transparent",
     alignSelf: "center",
-    marginBottom: 25,
+    marginBottom: 15,
+  },
+  upButton: {
+    position: "absolute",
+    left: 270,
+    top: 7,
+    padding: 5,
+    borderRadius: 5,
+  },
+  upIcon: {
+    fontSize: 15,
+  },
+  downButton: {
+    position: "absolute",
+    left: 300,
+    top: 10,
+    padding: 5,
+    borderRadius: 5,
+  },
+  downIcon: {
+    fontSize: 15,
+    transform: "rotate(180deg)",
   },
   deleteButton: {
     position: "absolute",
