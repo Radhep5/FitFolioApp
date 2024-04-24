@@ -121,11 +121,8 @@ const AddCommentButton = ({ title, onPress }) => {
               <Text style={styles.historyTitle}>User Name Here</Text>
               <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
               <Text style={styles.historyDate}>{fetchedComment.date}</Text>
-              <TouchableOpacity style={styles.upButton}>
-                <Text style={styles.upIcon}>👍</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.downButton}>
-                <Text style={styles.downIcon}>👍</Text>
+              <TouchableOpacity style={styles.heartButton}>
+                <Text style={styles.heartIcon}>♡</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -288,26 +285,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 15,
   },
-  upButton: {
-    position: "absolute",
-    left: 270,
-    top: 7,
-    padding: 5,
-    borderRadius: 5,
-  },
-  upIcon: {
-    fontSize: 15,
-  },
-  downButton: {
+  heartButton: {
     position: "absolute",
     left: 300,
     top: 10,
     padding: 5,
     borderRadius: 5,
   },
-  downIcon: {
-    fontSize: 15,
-    transform: "rotate(180deg)",
+  heartIcon: {
+    fontSize: 20,
   },
   deleteButton: {
     position: "absolute",
