@@ -23,6 +23,7 @@ const AddCommentButton = ({ title, onPress }) => {
   const [paragraph, setParagraph] = useState("");
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
+  const [likeBoolean, setLikeBoolean] = useState(false);
 
   const [commentHistory, setCommentHistory] = useState([]);
 
@@ -30,10 +31,12 @@ const AddCommentButton = ({ title, onPress }) => {
     const comment = {
       text: paragraph,
       date: dateString,
+      favorite: likeBoolean,
     };
     setCommentHistory([...commentHistory, comment]);
     console.log("Comment:", paragraph);
     console.log("Date:", dateString);
+    console.log("Favorite:", likeBoolean);
 
     const updatedCommentHistory = [...commentHistory, comment];
     setCommentHistory(updatedCommentHistory);
@@ -85,6 +88,11 @@ const AddCommentButton = ({ title, onPress }) => {
     }
   };
 
+  const handleAddFavorite = async (index) => {
+    setLikeBoolean(true);
+    setForceUpdate(!forceUpdate);
+  };
+
   const [fetchedComments, setFetchedComments] = useState([]);
   useEffect(() => {
     const fetchComments = async () => {
@@ -121,7 +129,10 @@ const AddCommentButton = ({ title, onPress }) => {
               <Text style={styles.historyTitle}>User Name Here</Text>
               <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
               <Text style={styles.historyDate}>{fetchedComment.date}</Text>
-              <TouchableOpacity style={styles.heartButton}>
+              <TouchableOpacity
+                style={styles.heartButton}
+                onPress={() => handleAddFavorite()}
+              >
                 <Text style={styles.heartIcon}>♡</Text>
               </TouchableOpacity>
               <TouchableOpacity
