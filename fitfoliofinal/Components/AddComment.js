@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
 import CurrentDateComponent from "./CurrentDate.js";
 import {
@@ -22,17 +22,42 @@ const AddCommentButton = ({ title, onPress }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [paragraph, setParagraph] = useState("");
   const dateString = CurrentDateComponent();
+  const [forceUpdate, setForceUpdate] = useState(false);
+  const likeBoolean = false;
 
   const [commentHistory, setCommentHistory] = useState([]);
 
-  const handleSaveComment = () => {
+  const handleSaveComment = async () => {
     const comment = {
       text: paragraph,
       date: dateString,
+      favorite: likeBoolean,
     };
     setCommentHistory([...commentHistory, comment]);
     console.log("Comment:", paragraph);
     console.log("Date:", dateString);
+    console.log("Favorite:", likeBoolean);
+
+    const updatedCommentHistory = [...commentHistory, comment];
+    setCommentHistory(updatedCommentHistory);
+
+    try {
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      const commentDocSnapshot = await getDoc(commentDocRef);
+      const existingComments = commentDocSnapshot.exists()
+        ? commentDocSnapshot.data().comments || []
+        : [];
+
+      const updatedComments = [...existingComments, comment];
+      await setDoc(commentDocRef, { comments: updatedComments });
+      console.log("Stored comment successfully:", comment);
+      setForceUpdate(!forceUpdate);
+    } catch (error) {
+      console.error("Error storing comment:", error);
+    }
   };
 
   const handleSaveCommentAndCloseModal = () => {
@@ -41,11 +66,82 @@ const AddCommentButton = ({ title, onPress }) => {
     setParagraph("");
   };
 
-  const handleDeleteComment = (index) => {
+  const handleDeleteComment = async (index) => {
     const updatedCommentHistory = [...commentHistory];
     updatedCommentHistory.splice(index, 1);
     setCommentHistory(updatedCommentHistory);
+
+    try {
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      const commentDocSnapshot = await getDoc(commentDocRef);
+      const commentsData = commentDocSnapshot.data()?.comments || [];
+      commentsData.splice(index, 1);
+
+      await setDoc(commentDocRef, { comments: commentsData });
+      setForceUpdate(!forceUpdate);
+      console.log("Comment deleted successfully");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
+
+  const handleAddFavorite = async (index) => {
+    try {
+      let moveUp = true;
+      const updatedComments = fetchedComments.map((comment, i) => {
+        if (i === index) {
+          if (comment.favorite) {
+            moveUp = false;
+          }
+          return {
+            ...comment,
+            favorite: !comment.favorite,
+          };
+        }
+        return comment;
+      });
+      const commentToMove = updatedComments[index];
+      updatedComments.splice(index, 1);
+      if (moveUp) {
+        updatedComments.unshift(commentToMove);
+      } else {
+        updatedComments.push(commentToMove);
+      }
+
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      await setDoc(commentDocRef, { comments: updatedComments });
+      console.log("Comment favorited successfully");
+      setForceUpdate(!forceUpdate);
+    } catch (error) {
+      console.error("Error favoriting comment:", error);
+    }
+  };
+
+  const [fetchedComments, setFetchedComments] = useState([]);
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const userDocRef = doc(trackerDB, "user", "userdocID");
+        const commentsCollectionRef = collection(userDocRef, "comments");
+        const commentDocRef = doc(commentsCollectionRef, dateString);
+
+        const commentDocSnapshot = await getDoc(commentDocRef);
+        const commentsData = commentDocSnapshot.data()?.comments || [];
+
+        setFetchedComments(commentsData);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchComments();
+  }, [forceUpdate]);
 
   return (
     <View style={styles.container}>
@@ -58,11 +154,24 @@ const AddCommentButton = ({ title, onPress }) => {
       <View style={styles.underline}></View>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.commentHistoryContainer}>
-          {commentHistory.map((comment, index) => (
+          {fetchedComments.map((fetchedComment, index) => (
             <View key={index} style={styles.commentBox}>
               <Text style={styles.historyTitle}>User Name Here</Text>
-              <Text style={styles.historyComment}>"{comment.text}"</Text>
-              <Text style={styles.historyDate}>{comment.date}</Text>
+              <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
+              <Text style={styles.historyDate}>{fetchedComment.date}</Text>
+              <TouchableOpacity
+                style={styles.heartButton}
+                onPress={() => handleAddFavorite(index)}
+              >
+                <Text
+                  style={[
+                    styles.heartIcon,
+                    fetchedComment.favorite ? styles.heartIconFavorited : null,
+                  ]}
+                >
+                  ♡
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDeleteComment(index)}
@@ -222,12 +331,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     backgroundColor: "transparent",
     alignSelf: "center",
-    marginBottom: 25,
+    marginBottom: 15,
+  },
+  heartButton: {
+    position: "absolute",
+    left: 338,
+    top: 3,
+    padding: 5,
+    borderRadius: 5,
+  },
+  heartIcon: {
+    color: "white",
+    fontSize: 24,
+  },
+  heartIconFavorited: {
+    color: "#ff3333",
+    fontSize: 24,
   },
   deleteButton: {
     position: "absolute",
-    left: 340,
-    top: 5,
+    left: 380,
+    top: 3,
     padding: 5,
     borderRadius: 5,
   },
