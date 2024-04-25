@@ -63,37 +63,37 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const AuthListener = async () => {
-    useEffect(() => {
-      const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          // User is signed in
-          const userEmail = user.email;
+  // const AuthListener = async () => {
+  //   useEffect(() => {
+  //     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+  //       if (user) {
+  //         // User is signed in
+  //         const userEmail = user.email;
 
-          // Create a document in Firestore under "users" collection with the email
-          trackerDB
-            .collection("user")
-            .doc(user.uid)
-            .set({
-              email: userEmail,
-            })
-            .then(() => {
-              console.log("User document created in Firestore");
-            })
-            .catch((error) => {
-              console.error("Error creating user document: ", error);
-            });
-        } else {
-          // No user is signed in
-          console.log("No user signed in");
-        }
-      });
+  //         // Create a document in Firestore under "users" collection with the email
+  //         trackerDB
+  //           .collection("user")
+  //           .doc(user.uid)
+  //           .set({
+  //             email: userEmail,
+  //           })
+  //           .then(() => {
+  //             console.log("User document created in Firestore");
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error creating user document: ", error);
+  //           });
+  //       } else {
+  //         // No user is signed in
+  //         console.log("No user signed in");
+  //       }
+  //     });
 
-      return () => unsubscribe(); // Unsubscribe from the auth state listener when the component unmounts
-    }, []);
+  //     return () => unsubscribe(); // Unsubscribe from the auth state listener when the component unmounts
+  //   }, []);
 
-    return null; // This component doesn't render anything
-  };
+  //   return null; // This component doesn't render anything
+  // };
 
   // const onLoginPress = async () => {
   //   firebase
@@ -132,8 +132,8 @@ const HomeScreen = ({ navigation }) => {
         <>
           {isLoggedIn ? (
             <>
-              {/* <Image style={styles.logo} source={logoClear} /> */}
-              <View style={styles.loginScreenContainer}>
+              <Image style={styles.logo} source={logoClear} />
+              <View>
                 <View style={styles.loginFormView}>
                   <TextInput
                     placeholder="Email"
@@ -164,8 +164,8 @@ const HomeScreen = ({ navigation }) => {
             </>
           ) : (
             <>
-              {/* <Image style={styles.logo} source={logoClear} /> */}
-              <View style={styles.loginScreenContainer}>
+              <Image style={styles.logo} source={logoClear} />
+              <View>
                 <View style={styles.loginFormView}>
                   <TextInput
                     placeholder="Email 2"
@@ -186,7 +186,7 @@ const HomeScreen = ({ navigation }) => {
                     buttonStyle={styles.loginButton}
                     title="Sign Up"
                     onPress={() => {
-                      onSignUpPress(), handleHomeScreenOn(), AuthListener();
+                      onSignUpPress(), handleHomeScreenOn();
                     }}
                   />
                 </View>
@@ -199,7 +199,11 @@ const HomeScreen = ({ navigation }) => {
       ) : (
         <>
           <View>
+            <Image style={styles.logoHome} source={logoClear} />
             <View style={styles.navigationBox}>
+              <Text style={styles.navigationText}>
+                Track your workout progress for today!
+              </Text>
               <MaterialCommunityIcons
                 style={styles.iconStyle}
                 name="calendar-plus"
@@ -220,6 +224,9 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View style={styles.navigationBox}>
+              <Text style={styles.navigationText}>
+                Visit our curated information page for advice on workouts!
+              </Text>
               <MaterialCommunityIcons
                 style={styles.iconStyle}
                 name="dumbbell"
@@ -240,6 +247,9 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View style={styles.navigationBox}>
+              <Text style={styles.navigationText}>
+                Need some help with meal planning from the community?
+              </Text>
               <MaterialCommunityIcons
                 style={styles.iconStyle}
                 name="food-apple"
@@ -273,12 +283,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginFormView: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#2D2D2D",
+    color: "#2D2D2D",
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "white",
+    height: 275,
+    width: 320,
   },
   loginFormTextInput: {
-    height: 43,
+    height: 50,
     width: 250,
     fontSize: 14,
     borderRadius: 5,
@@ -286,8 +302,8 @@ const styles = StyleSheet.create({
     borderColor: "#eaeaea",
     backgroundColor: "#fafafa",
     paddingLeft: 10,
-    marginTop: 10,
-    marginBottom: 5,
+    marginTop: 15,
+    marginBottom: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -315,13 +331,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     marginBottom: 20,
   },
-  buttonSwitch: {},
   logo: {
-    width: 325,
-    height: 325,
+    width: 215,
+    height: 215,
     marginStart: 13,
-    marginTop: 60,
-    marginBottom: 100,
+    marginTop: -60,
+    marginBottom: -10,
+    resizeMode: "cover",
   },
   navigationBox: {
     borderWidth: 2,
@@ -330,24 +346,38 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "white",
     backgroundColor: "#2F2F2F",
-    justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center",
-    marginTop: 30,
-    marginBottom: 30,
+    marginTop: 15,
+    marginBottom: 15,
+    flexDirection: "row",
   },
   arrowStyle: {
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 235,
+    flexDirection: "column",
+    marginLeft: 3,
     // backgroundColor: "lightblue",
     // borderRadius: 5,
   },
   iconStyle: {
-    marginTop: 30,
-    marginLeft: 235,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 3,
   },
-  header: {},
+  navigationText: {
+    color: "white",
+    paddingTop: 0,
+    flex: 1,
+    fontSize: 25,
+    paddingLeft: 25,
+  },
+  logoHome: {
+    width: 125,
+    height: 125,
+    marginTop: -10,
+    marginBottom: -10,
+    marginLeft: 105,
+  },
 });
 
 export default HomeScreen;

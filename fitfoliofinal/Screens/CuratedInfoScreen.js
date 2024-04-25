@@ -29,7 +29,7 @@ const CuratedInfoScreen = ({ navigation }) => {
     }
     if (selected == data[1].key) {
       console.log("hi2");
-      getMeals();
+      //getMeals();
     }
     if (selected == data[2].key) {
     }
@@ -51,7 +51,11 @@ const CuratedInfoScreen = ({ navigation }) => {
 
     try {
       const response = await axios.request(options);
-      console.log(response.data);
+      //console.log(response.data);
+      const workouts = response.data; // Assuming response.data is an array of workouts
+      const randomIndex = Math.floor(Math.random() * workouts.length); // Generate a random index
+      const randomWorkout = workouts[randomIndex]; // Select a random workout
+      console.log(randomWorkout); // Log the random workout
     } catch (error) {
       console.error(error);
     }
@@ -133,14 +137,16 @@ const CuratedInfoScreen = ({ navigation }) => {
           searchPlaceholder="Choose topic"
           onSelect={runSelectTopic}
         />
-        <Text>HI</Text>
+        {/* {selected !== null &&
+          ![1, 2, 3, 4].includes(selected)(
+            <Text style={styles.header}>{data[selected - 1].value}</Text>
+          )} */}
       </View>
       <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
         <View style={[styles.infoBox]}>
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
-              getWorkouts();
               setModalVisible(true);
             }}
           >
@@ -183,7 +189,6 @@ const CuratedInfoScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
-              getWorkouts();
               setModalVisible(true);
             }}
           >
@@ -226,7 +231,6 @@ const CuratedInfoScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
-              getWorkouts();
               setModalVisible(true);
             }}
           >
@@ -269,7 +273,6 @@ const CuratedInfoScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
-              getWorkouts();
               setModalVisible(true);
             }}
           >
@@ -320,9 +323,10 @@ const styles = StyleSheet.create({
   },
   containerList: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "left",
     backgroundColor: "#f0f0f0",
     padding: 20,
+    paddingLeft: 30,
   },
   container: {
     justifyContent: "center",
@@ -349,6 +353,14 @@ const styles = StyleSheet.create({
     marginLeft: 235,
     // backgroundColor: "lightblue",
     // borderRadius: 5,
+  },
+  header: {
+    color: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: 10,
+    fontSize: 30,
+    paddingTop: 4,
   },
 });
 
