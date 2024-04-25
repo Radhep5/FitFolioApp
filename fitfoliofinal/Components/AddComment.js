@@ -23,7 +23,7 @@ const AddCommentButton = ({ title, onPress }) => {
   const [paragraph, setParagraph] = useState("");
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
-  const [likeBoolean, setLikeBoolean] = useState(false);
+  const likeBoolean = false;
 
   const [commentHistory, setCommentHistory] = useState([]);
 
@@ -89,8 +89,30 @@ const AddCommentButton = ({ title, onPress }) => {
   };
 
   const handleAddFavorite = async (index) => {
-    setLikeBoolean(true);
-    setForceUpdate(!forceUpdate);
+    try {
+      const updatedComments = fetchedComments.map((comment, i) => {
+        if (i === index) {
+          return {
+            ...comment,
+            favorite: !comment.favorite, // Toggle favorite property
+          };
+        }
+        return comment;
+      });
+      const commentToMove = updatedComments[index];
+      updatedComments.splice(index, 1); // Remove the comment from current position
+      updatedComments.unshift(commentToMove); // Add it to the beginning
+
+      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const commentsCollectionRef = collection(userDocRef, "comments");
+      const commentDocRef = doc(commentsCollectionRef, dateString);
+
+      await setDoc(commentDocRef, { comments: updatedComments });
+      console.log("Comment favorited successfully");
+      setForceUpdate(!forceUpdate);
+    } catch (error) {
+      console.error("Error favoriting comment:", error);
+    }
   };
 
   const [fetchedComments, setFetchedComments] = useState([]);
@@ -131,7 +153,7 @@ const AddCommentButton = ({ title, onPress }) => {
               <Text style={styles.historyDate}>{fetchedComment.date}</Text>
               <TouchableOpacity
                 style={styles.heartButton}
-                onPress={() => handleAddFavorite()}
+                onPress={() => handleAddFavorite(index)}
               >
                 <Text style={styles.heartIcon}>♡</Text>
               </TouchableOpacity>
@@ -298,18 +320,19 @@ const styles = StyleSheet.create({
   },
   heartButton: {
     position: "absolute",
-    left: 300,
-    top: 10,
+    left: 338,
+    top: 3,
     padding: 5,
     borderRadius: 5,
   },
   heartIcon: {
-    fontSize: 20,
+    color: "white",
+    fontSize: 24,
   },
   deleteButton: {
     position: "absolute",
-    left: 340,
-    top: 5,
+    left: 380,
+    top: 3,
     padding: 5,
     borderRadius: 5,
   },
