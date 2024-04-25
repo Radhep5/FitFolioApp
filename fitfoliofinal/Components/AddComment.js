@@ -90,18 +90,26 @@ const AddCommentButton = ({ title, onPress }) => {
 
   const handleAddFavorite = async (index) => {
     try {
+      let moveUp = true;
       const updatedComments = fetchedComments.map((comment, i) => {
         if (i === index) {
+          if (comment.favorite) {
+            moveUp = false;
+          }
           return {
             ...comment,
-            favorite: !comment.favorite, // Toggle favorite property
+            favorite: !comment.favorite,
           };
         }
         return comment;
       });
       const commentToMove = updatedComments[index];
-      updatedComments.splice(index, 1); // Remove the comment from current position
-      updatedComments.unshift(commentToMove); // Add it to the beginning
+      updatedComments.splice(index, 1);
+      if (moveUp) {
+        updatedComments.unshift(commentToMove);
+      } else {
+        updatedComments.push(commentToMove);
+      }
 
       const userDocRef = doc(trackerDB, "user", "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
@@ -155,7 +163,14 @@ const AddCommentButton = ({ title, onPress }) => {
                 style={styles.heartButton}
                 onPress={() => handleAddFavorite(index)}
               >
-                <Text style={styles.heartIcon}>♡</Text>
+                <Text
+                  style={[
+                    styles.heartIcon,
+                    fetchedComment.favorite ? styles.heartIconFavorited : null,
+                  ]}
+                >
+                  ♡
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.deleteButton}
@@ -327,6 +342,10 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     color: "white",
+    fontSize: 24,
+  },
+  heartIconFavorited: {
+    color: "#ff3333",
     fontSize: 24,
   },
   deleteButton: {
