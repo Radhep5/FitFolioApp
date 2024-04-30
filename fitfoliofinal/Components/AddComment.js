@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     borderColor: "white",
-    paddingTop: 130,
-    height: 600,
+    paddingTop: 140,
+    marginBottom: 0,
   },
   button: {
     padding: 10,

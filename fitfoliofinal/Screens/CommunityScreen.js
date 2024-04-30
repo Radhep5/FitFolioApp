@@ -20,7 +20,7 @@ const CommunityScreen = ({ navigation }) => {
       <View>
         <Text style={styles.title}>🍴Meals</Text>
       </View>
-      <View style={styles.underline}>
+      <View style={styles.buttonPad}>
         <AddCommentButton
           title="+ Create Post"
           onPress={() => console.log("Button pressed")}
@@ -41,6 +41,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: "white",
     zIndex: 2,
+  },
+  buttonPad: {
+    paddingTop: 0,
   },
 });
 
