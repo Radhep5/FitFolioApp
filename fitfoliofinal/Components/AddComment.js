@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { doc, setDoc, getDoc, collection } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
 import CurrentDateComponent from "./CurrentDate.js";
+import { SelectList } from "react-native-dropdown-select-list";
 import {
   View,
   Text,
@@ -24,6 +25,7 @@ const AddCommentButton = ({ title, onPress }) => {
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
   const likeBoolean = false;
+  const [selectedCategory, setSelectedCategory] = useState("Meals");
 
   const [commentHistory, setCommentHistory] = useState([]);
 
@@ -31,11 +33,13 @@ const AddCommentButton = ({ title, onPress }) => {
     const comment = {
       text: paragraph,
       date: dateString,
+      category: selectedCategory,
       favorite: likeBoolean,
     };
     setCommentHistory([...commentHistory, comment]);
     console.log("Comment:", paragraph);
     console.log("Date:", dateString);
+    console.log("Category:", selectedCategory);
     console.log("Favorite:", likeBoolean);
 
     const updatedCommentHistory = [...commentHistory, comment];
@@ -44,7 +48,7 @@ const AddCommentButton = ({ title, onPress }) => {
     try {
       const userDocRef = doc(trackerDB, "user", "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
-      const commentDocRef = doc(commentsCollectionRef, dateString);
+      const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
       const commentDocSnapshot = await getDoc(commentDocRef);
       const existingComments = commentDocSnapshot.exists()
@@ -74,7 +78,7 @@ const AddCommentButton = ({ title, onPress }) => {
     try {
       const userDocRef = doc(trackerDB, "user", "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
-      const commentDocRef = doc(commentsCollectionRef, dateString);
+      const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
       const commentDocSnapshot = await getDoc(commentDocRef);
       const commentsData = commentDocSnapshot.data()?.comments || [];
@@ -113,7 +117,7 @@ const AddCommentButton = ({ title, onPress }) => {
 
       const userDocRef = doc(trackerDB, "user", "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
-      const commentDocRef = doc(commentsCollectionRef, dateString);
+      const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
       await setDoc(commentDocRef, { comments: updatedComments });
       console.log("Comment favorited successfully");
@@ -129,7 +133,7 @@ const AddCommentButton = ({ title, onPress }) => {
       try {
         const userDocRef = doc(trackerDB, "user", "userdocID");
         const commentsCollectionRef = collection(userDocRef, "comments");
-        const commentDocRef = doc(commentsCollectionRef, dateString);
+        const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
         const commentDocSnapshot = await getDoc(commentDocRef);
         const commentsData = commentDocSnapshot.data()?.comments || [];
