@@ -20,14 +20,48 @@ import {
 const { width: screenWidth } = Dimensions.get("window");
 
 const AddCommentButton = ({ title, onPress }) => {
+  const [selected, setSelected] = useState();
+
   const [isVisible, setIsVisible] = useState(false);
   const [paragraph, setParagraph] = useState("");
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
   const likeBoolean = false;
   const [selectedCategory, setSelectedCategory] = useState("Meals");
+  const [displayText, setDisplayText] = useState("");
 
   const [commentHistory, setCommentHistory] = useState([]);
+
+  const data = [
+    { key: "1", value: "🍴Meals" },
+    { key: "2", value: "Workouts" },
+    { key: "3", value: "Equipment" },
+    { key: "4", value: "Supplements" },
+  ];
+
+  const runSelectTopic = () => {
+    console.log("working");
+    if (selected == data[0].key) {
+      console.log("hi");
+      setDisplayText("🍴Meals");
+      setSelectedCategory("🍴Meals");
+    }
+    if (selected == data[1].key) {
+      console.log("hi2");
+      setDisplayText("Workouts");
+      setSelectedCategory("Workouts");
+    }
+    if (selected == data[2].key) {
+      setDisplayText("Equipment");
+      setSelectedCategory("Equipment");
+    }
+    if (selected == data[3].key) {
+      setDisplayText("Supplements");
+      setSelectedCategory("Supplements");
+    }
+    console.log(selectedCategory);
+    setForceUpdate(!forceUpdate);
+  };
 
   const handleSaveComment = async () => {
     const comment = {
@@ -149,6 +183,21 @@ const AddCommentButton = ({ title, onPress }) => {
 
   return (
     <View style={styles.container}>
+      <View style={[styles.containerList, { backgroundColor: "#1E1E1E" }]}>
+        <SelectList
+          data={data}
+          setSelected={setSelected}
+          style={[styles.selectorBox]}
+          dropdownStyles={{ backgroundColor: "gray" }}
+          dropdownItemStyles={{ marginHorizontal: 10 }}
+          dropdownTextStyles={{ color: "white" }}
+          placeholder="Select Topic"
+          searchPlaceholder="Choose topic"
+          onSelect={runSelectTopic}
+        />
+
+        <Text style={styles.title}>{displayText}</Text>
+      </View>
       <TouchableOpacity
         style={styles.buttonClear}
         onPress={() => setIsVisible(true)}
@@ -212,6 +261,14 @@ const AddCommentButton = ({ title, onPress }) => {
 };
 
 const styles = StyleSheet.create({
+  title: {
+    top: 50,
+    left: 30,
+    alignSelf: "left",
+    fontSize: 32,
+    color: "white",
+    zIndex: 2,
+  },
   buttonClear: {
     borderWidth: 1,
     width: 101,
@@ -361,6 +418,16 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     fontSize: 20,
+  },
+  containerList: {
+    flexDirection: "row",
+    justifyContent: "left",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+    paddingLeft: 30,
+  },
+  selectorBox: {
+    width: 200,
   },
 });
 
