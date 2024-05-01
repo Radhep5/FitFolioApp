@@ -168,14 +168,14 @@ const HomeScreen = ({ navigation }) => {
               <View>
                 <View style={styles.loginFormView}>
                   <TextInput
-                    placeholder="Email 2"
+                    placeholder="Sign-up Email"
                     placeholderColor="#c4c3cb"
                     style={styles.loginFormTextInput}
                     value={email}
                     onChangeText={(value) => setEmail(value)}
                   />
                   <TextInput
-                    placeholder="Password 2"
+                    placeholder="Sign-up Password"
                     placeholderColor="#c4c3cb"
                     style={styles.loginFormTextInput}
                     value={password}
