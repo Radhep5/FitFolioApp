@@ -6,14 +6,59 @@ import {
   StyleSheet,
   Modal,
   Button,
+  Image,
 } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
+import squat from "../assets/squat.jpg";
+import lift from "../assets/lift.jpg";
+import plank from "../assets/plank.png";
+import running from "../assets/running.png";
+import pushup from "../assets/pushup.png";
 
 const CuratedInfoScreen = ({ navigation }) => {
   const [selected, setSelected] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [displayText, setDisplayText] = useState("");
+  const images = [
+    { name: "squat", image: squat },
+    { name: "lift", image: lift },
+    { name: "plank", image: plank },
+    { name: "running", image: running },
+    { name: "pushup", image: pushup },
+  ];
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const shuffledImages = shuffleArray(images);
+  const selectedImages = shuffledImages.slice(0, 2);
+
+  const muscleGroups = [
+    "Biceps",
+    "Triceps",
+    "Chest",
+    "Back",
+    "Legs",
+    "Abs",
+    "Lats",
+    "Hamstring",
+    "Calves",
+    "Quadriceps",
+    "Trapezius",
+    "Shoulders",
+    "Glutes",
+  ];
+
+  const randomMuscleIndex = Math.floor(Math.random() * muscleGroups.length);
+  const randomMuscleGroup = muscleGroups[randomMuscleIndex];
+
   const data = [
     { key: "1", value: "Workouts" },
     { key: "2", value: "Meals" },
@@ -26,14 +71,18 @@ const CuratedInfoScreen = ({ navigation }) => {
     if (selected == data[0].key) {
       console.log("hi");
       getWorkouts();
+      setDisplayText("Workouts");
     }
     if (selected == data[1].key) {
       console.log("hi2");
       //getMeals();
+      setDisplayText("Meals");
     }
     if (selected == data[2].key) {
+      setDisplayText("Equipment");
     }
     if (selected == data[3].key) {
+      setDisplayText("Supplements");
     }
   };
 
@@ -42,7 +91,7 @@ const CuratedInfoScreen = ({ navigation }) => {
     const options = {
       method: "GET",
       url: "https://work-out-api1.p.rapidapi.com/search",
-      params: { Muscles: "biceps" },
+      params: { Muscles: randomMuscleGroup },
       headers: {
         "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
         "X-RapidAPI-Host": "work-out-api1.p.rapidapi.com",
@@ -56,6 +105,8 @@ const CuratedInfoScreen = ({ navigation }) => {
       const randomIndex = Math.floor(Math.random() * workouts.length); // Generate a random index
       const randomWorkout = workouts[randomIndex]; // Select a random workout
       console.log(randomWorkout); // Log the random workout
+      const [firstKey, firstValue] = Object.entries(randomWorkout)[3];
+      console.log(`${firstKey}: ${firstValue}`);
     } catch (error) {
       console.error(error);
     }
@@ -137,13 +188,12 @@ const CuratedInfoScreen = ({ navigation }) => {
           searchPlaceholder="Choose topic"
           onSelect={runSelectTopic}
         />
-        {/* {selected !== null &&
-          ![1, 2, 3, 4].includes(selected)(
-            <Text style={styles.header}>{data[selected - 1].value}</Text>
-          )} */}
+
+        <Text style={styles.header}>{displayText}</Text>
       </View>
       <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
         <View style={[styles.infoBox]}>
+          <Image style={[styles.imageInBox]} source={selectedImages[0].image} />
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
@@ -186,90 +236,7 @@ const CuratedInfoScreen = ({ navigation }) => {
           </Modal>
         </View>
         <View style={[styles.infoBox]}>
-          <TouchableOpacity
-            style={styles.arrowStyle}
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          >
-            <MaterialCommunityIcons
-              name="arrow-right-thin"
-              size={70}
-              color="#3F9DF3"
-            />
-          </TouchableOpacity>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  padding: 20,
-                  borderRadius: 10,
-                }}
-              >
-                <Text>This is a popup modal!</Text>
-                <Button title="Close" onPress={() => setModalVisible(false)} />
-              </View>
-            </View>
-          </Modal>
-        </View>
-        <View style={[styles.infoBox]}>
-          <TouchableOpacity
-            style={styles.arrowStyle}
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          >
-            <MaterialCommunityIcons
-              name="arrow-right-thin"
-              size={70}
-              color="#3F9DF3"
-            />
-          </TouchableOpacity>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  padding: 20,
-                  borderRadius: 10,
-                }}
-              >
-                <Text>This is a popup modal!</Text>
-                <Button title="Close" onPress={() => setModalVisible(false)} />
-              </View>
-            </View>
-          </Modal>
-        </View>
-        <View style={[styles.infoBox]}>
+          <Image style={[styles.imageInBox]} source={selectedImages[1].image} />
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
@@ -338,17 +305,17 @@ const styles = StyleSheet.create({
   infoBox: {
     borderWidth: 0.5,
     width: 330,
-    height: 120,
+    height: 250,
     borderRadius: 10,
     borderColor: "white",
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    marginBottom: 25,
+    marginBottom: 45,
   },
   arrowStyle: {
-    marginTop: 10,
+    paddingTop: 25,
     marginBottom: 10,
     marginLeft: 235,
     // backgroundColor: "lightblue",
@@ -361,6 +328,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontSize: 30,
     paddingTop: 4,
+  },
+  imageInBox: {
+    marginTop: -20,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
 });
 
