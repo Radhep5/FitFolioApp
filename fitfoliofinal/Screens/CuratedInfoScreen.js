@@ -59,30 +59,79 @@ const CuratedInfoScreen = ({ navigation }) => {
   const randomMuscleIndex = Math.floor(Math.random() * muscleGroups.length);
   const randomMuscleGroup = muscleGroups[randomMuscleIndex];
 
+  const recipePhrases = [
+    "Unlock Deliciousness Inside: Click to Discover a Mouthwatering Recipe!",
+    "Unleash Culinary Magic: Click for a Taste Sensation!",
+    "Open for Flavor: Click Here for Your Next Favorite Recipe!",
+    "Crack Open for Kitchen Inspiration: Click to Cook up Something Special!",
+    "Click for a Gastronomic Adventure: Dive into a Irresistible Recipe!",
+    "Tap into Taste: Click to Reveal the Secret to a Scrumptious Dish!",
+    "Curiosity Meets Flavor: Click to Explore a Must-Try Recipe!",
+    "Indulge Your Senses: Click Here for a Recipe That Will Wow!",
+    "Click to Elevate Your Cooking Game: Discover the Recipe Everyone's Talking About!",
+    "Unbox Delight: Click Here to Unveil the Recipe That'll Make Your Day!",
+    "Satisfy Your Cravings: Click for a Recipe That's Simply Irresistible!",
+  ];
+
+  const exercisePhrases = [
+    "Unlock Your Full Potential: Discover a New Exercise for a Healthier, Stronger You!",
+    "Revolutionize Your Workout Routine: Try This Exciting New Exercise!",
+    "Transform Your Fitness Journey: Dive into the Ultimate Exercise Innovation!",
+    "Elevate Your Fitness Game: Unveiling a Fresh Exercise for Maximum Results!",
+    "Ignite Your Passion for Fitness: Explore a New Exercise Adventure!",
+    "Upgrade Your Workouts Today: Introducing a Game-Changing Exercise Technique!",
+    "Discover Your Body's Potential: Step into a New Exercise Experience!",
+    "Unleash Your Inner Athlete: Embrace a New Exercise Challenge!",
+    "Get Ready to Sweat: Uncover a Cutting-Edge Exercise Move!",
+    "Say Hello to a Fitter You: Try This Exciting New Exercise Today!",
+    "Break the Mold: Embrace a New Exercise for Total Body Transformation!",
+  ];
+
+  const equipmentPhrases = [
+    "Maximize Your Gains: Unleash the Power of Gym Equipment!",
+    "Sculpt Your Muscles: Conquer the Gym for Ultimate Strength!",
+    "Boost Your Endurance: Harness the Power of Fitness Equipment!",
+    "Define Your Physique: Take on Gym Tools for Total Body Transformation!",
+    "Build Core Strength: Master the Equipment for a Rock-Solid Midsection!",
+    "Enhance Flexibility: Embrace Gym Gear for Inner Peace and Balance!",
+    "Elevate Your Cardio: Dominate the Gym Machines for Heart-Pumping Workouts!",
+    "Challenge Your Limits: Explore Gym Equipment for Intense Workouts!",
+    "Achieve Balance and Stability: Utilize Gym Tools for Core Activation!",
+    "Unleash Explosive Power: Power Up with Gym Equipment for Dynamic Workouts!",
+    "Push Your Limits: Harness the Tools for Fitness Gains!",
+  ];
+
+  const shuffledEquipmentPhrases = shuffleArray(equipmentPhrases);
+  const selectedEquipmentPhrases = shuffledEquipmentPhrases.slice(0, 2);
+
+  const shuffledExercisePhrases = shuffleArray(exercisePhrases);
+  const selectedExercisePhrases = shuffledExercisePhrases.slice(0, 2);
+
+  const shuffledFoodPhrases = shuffleArray(recipePhrases);
+  const selectedFoodPhrases = shuffledFoodPhrases.slice(0, 2);
+  let meal1;
+  let meal2;
+
   const data = [
-    { key: "1", value: "Workouts" },
-    { key: "2", value: "Meals" },
+    { key: "1", value: "Meals" },
+    { key: "2", value: "Workouts" },
     { key: "3", value: "Equipment" },
-    { key: "4", value: "Supplements" },
   ];
 
   const runSelectTopic = () => {
     console.log("working");
     if (selected == data[0].key) {
       console.log("hi");
-      getWorkouts();
-      setDisplayText("Workouts");
+      getMeals();
+      setDisplayText("Meals");
     }
     if (selected == data[1].key) {
       console.log("hi2");
-      //getMeals();
-      setDisplayText("Meals");
+      getWorkouts();
+      setDisplayText("Workouts");
     }
     if (selected == data[2].key) {
       setDisplayText("Equipment");
-    }
-    if (selected == data[3].key) {
-      setDisplayText("Supplements");
     }
   };
 
@@ -116,9 +165,11 @@ const CuratedInfoScreen = ({ navigation }) => {
   const getMeals = async (event) => {
     const options = {
       method: "GET",
-      url: "https://tasty.p.rapidapi.com/recipes/auto-complete",
+      url: "https://tasty.p.rapidapi.com/recipes/list",
       params: {
-        prefix: "chicken soup",
+        from: "0",
+        size: "20",
+        tags: "under_30_minutes",
       },
       headers: {
         "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
@@ -128,33 +179,24 @@ const CuratedInfoScreen = ({ navigation }) => {
 
     try {
       const response = await axios.request(options);
-      console.log(response.data);
+      const meals = response.data.results;
+      let randomIndex1 = Math.floor(Math.random() * meals.length);
+      let randomIndex2 = Math.floor(Math.random() * meals.length);
+      while (randomIndex2 === randomIndex1) {
+        randomIndex2 = Math.floor(Math.random() * meals.length);
+      }
+
+      meal1 = meals[randomIndex1];
+      meal2 = meals[randomIndex2];
+
+      console.log("Meal 1 Description:", meal1.description);
+      console.log("Meal 2 Description:", meal2.description);
     } catch (error) {
       console.error(error);
     }
   };
 
   //API #3
-  const getSupplement = async (event) => {
-    const options = {
-      method: "GET",
-      url: "https://work-out-api1.p.rapidapi.com/search",
-      params: { Muscles: "biceps" },
-      headers: {
-        "X-RapidAPI-Key": "bc3e44159emsh5388156e6328a5cp159b32jsn42334b02b266",
-        "X-RapidAPI-Host": "work-out-api1.p.rapidapi.com",
-      },
-    };
-
-    try {
-      const response = await axios.request(options);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  //API #4
   const getEquipment = async (event) => {
     const options = {
       method: "GET",
@@ -187,6 +229,7 @@ const CuratedInfoScreen = ({ navigation }) => {
           placeholder="Select Topic"
           searchPlaceholder="Choose topic"
           onSelect={runSelectTopic}
+          defaultOption={data[0]}
         />
 
         <Text style={styles.header}>{displayText}</Text>
@@ -194,6 +237,21 @@ const CuratedInfoScreen = ({ navigation }) => {
       <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
         <View style={[styles.infoBox]}>
           <Image style={[styles.imageInBox]} source={selectedImages[0].image} />
+          <View style={[styles.textView]}>
+            {selected === data[0].key && (
+              <Text style={[styles.arrowText]}>{selectedFoodPhrases[0]}</Text>
+            )}
+            {selected === data[1].key && (
+              <Text style={[styles.arrowText]}>
+                {selectedExercisePhrases[0]}
+              </Text>
+            )}
+            {selected === data[2].key && (
+              <Text style={[styles.arrowText]}>
+                {selectedEquipmentPhrases[0]}
+              </Text>
+            )}
+          </View>
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
@@ -206,37 +264,52 @@ const CuratedInfoScreen = ({ navigation }) => {
               color="#3F9DF3"
             />
           </TouchableOpacity>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
           >
             <View
               style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backgroundColor: "white",
+                padding: 20,
+                borderRadius: 10,
               }}
             >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  padding: 20,
-                  borderRadius: 10,
-                }}
-              >
-                <Text>This is a popup modal!</Text>
-                <Button title="Close" onPress={() => setModalVisible(false)} />
-              </View>
+              <Text>This is a popup modal!</Text>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
-          </Modal>
-        </View>
+          </View>
+        </Modal>
         <View style={[styles.infoBox]}>
           <Image style={[styles.imageInBox]} source={selectedImages[1].image} />
+          <View style={[styles.textView]}>
+            {selected === data[0].key && (
+              <Text style={[styles.arrowText]}>{selectedFoodPhrases[1]}</Text>
+            )}
+            {selected === data[1].key && (
+              <Text style={[styles.arrowText]}>
+                {selectedExercisePhrases[1]}
+              </Text>
+            )}
+            {selected === data[2].key && (
+              <Text style={[styles.arrowText]}>
+                {selectedExercisePhrases[1]}
+              </Text>
+            )}
+          </View>
           <TouchableOpacity
             style={styles.arrowStyle}
             onPress={() => {
@@ -249,35 +322,35 @@ const CuratedInfoScreen = ({ navigation }) => {
               color="#3F9DF3"
             />
           </TouchableOpacity>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
           >
             <View
               style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                backgroundColor: "white",
+                padding: 20,
+                borderRadius: 10,
               }}
             >
-              <View
-                style={{
-                  backgroundColor: "white",
-                  padding: 20,
-                  borderRadius: 10,
-                }}
-              >
-                <Text>This is a popup modal!</Text>
-                <Button title="Close" onPress={() => setModalVisible(false)} />
-              </View>
+              <Text>This is a popup modal!</Text>
+              <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
-          </Modal>
-        </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
@@ -315,11 +388,12 @@ const styles = StyleSheet.create({
     marginBottom: 45,
   },
   arrowStyle: {
-    paddingTop: 25,
-    marginBottom: 10,
+    position: "absolute",
     marginLeft: 235,
-    // backgroundColor: "lightblue",
-    // borderRadius: 5,
+    top: 160,
+    left: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
   header: {
     color: "white",
@@ -330,9 +404,20 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   imageInBox: {
-    marginTop: -20,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
+    bottom: 21,
+  },
+  arrowText: {
+    color: "white",
+    fontSize: 20,
+    marginStart: 10,
+    marginTop: 10,
+    marginRight: 100,
+  },
+  textView: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
