@@ -34,9 +34,9 @@ const AddCommentButton = ({ title, onPress }) => {
 
   const data = [
     { key: "1", value: "🍴Meals" },
-    { key: "2", value: "Workouts" },
-    { key: "3", value: "Equipment" },
-    { key: "4", value: "Supplements" },
+    { key: "2", value: "🏋🏼Workouts" },
+    { key: "3", value: "🛠️Equipment" },
+    { key: "4", value: "🥛Supplements" },
   ];
 
   const runSelectTopic = () => {
