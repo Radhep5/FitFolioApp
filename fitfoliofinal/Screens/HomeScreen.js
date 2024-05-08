@@ -57,6 +57,7 @@ const HomeScreen = ({ navigation }) => {
     if (email && password) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
+        //navigation.navigate("Account", { username: email.split("@")[0] });
       } catch (err) {
         console.log("got error: ", err.message);
       }
