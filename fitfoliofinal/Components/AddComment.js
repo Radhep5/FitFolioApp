@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { doc, setDoc, getDoc, collection } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
 import { trackerDB } from "../config/firebase.js";
 import CurrentDateComponent from "./CurrentDate.js";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -83,7 +83,7 @@ const AddCommentButton = ({ title, onPress, username }) => {
     setCommentHistory(updatedCommentHistory);
 
     try {
-      const userDocRef = doc(trackerDB, username, "userdocID");
+      const userDocRef = doc(trackerDB, "Users", username);
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -113,7 +113,7 @@ const AddCommentButton = ({ title, onPress, username }) => {
     setCommentHistory(updatedCommentHistory);
 
     try {
-      const userDocRef = doc(trackerDB, username, "userdocID");
+      const userDocRef = doc(trackerDB, "Users", username);
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -152,7 +152,7 @@ const AddCommentButton = ({ title, onPress, username }) => {
         updatedComments.push(commentToMove);
       }
 
-      const userDocRef = doc(trackerDB, username, "userdocID");
+      const userDocRef = doc(trackerDB, "Users", username);
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -168,19 +168,27 @@ const AddCommentButton = ({ title, onPress, username }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const userDocRef = doc(trackerDB, username, "userdocID");
-        const commentsCollectionRef = collection(userDocRef, "comments");
-        const commentDocRef = doc(commentsCollectionRef, selectedCategory);
+        const userDocsSnapshot = await getDocs(collection(trackerDB, "Users"));
+        const fetchedComments = [];
 
-        const commentDocSnapshot = await getDoc(commentDocRef);
-        const commentsData = commentDocSnapshot.data()?.comments || [];
+        // Use Promise.all to ensure all async operations are completed before setting the state
+        await Promise.all(
+          userDocsSnapshot.docs.map(async (userDoc) => {
+            const commentsCollectionRef = collection(userDoc.ref, "comments");
+            const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
-        setFetchedComments(commentsData);
+            const commentDocSnapshot = await getDoc(commentDocRef);
+            const commentsData = commentDocSnapshot.data()?.comments || [];
+
+            fetchedComments.push(...commentsData);
+          })
+        );
+
+        setFetchedComments(fetchedComments);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
     };
-
     fetchComments();
   }, [forceUpdate]);
 
