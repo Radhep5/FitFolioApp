@@ -27,7 +27,7 @@ const AddCommentButton = ({ title, onPress }) => {
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
   const likeBoolean = false;
-  const [selectedCategory, setSelectedCategory] = useState("Meals");
+  const [selectedCategory, setSelectedCategory] = useState("🍴Meals");
   const [displayText, setDisplayText] = useState("");
 
   const [commentHistory, setCommentHistory] = useState([]);
@@ -48,16 +48,16 @@ const AddCommentButton = ({ title, onPress }) => {
     }
     if (selected == data[1].key) {
       console.log("hi2");
-      setDisplayText("Workouts");
-      setSelectedCategory("Workouts");
+      setDisplayText("🏋🏼Workouts");
+      setSelectedCategory("🏋🏼Workouts");
     }
     if (selected == data[2].key) {
-      setDisplayText("Equipment");
-      setSelectedCategory("Equipment");
+      setDisplayText("🛠️Equipment");
+      setSelectedCategory("🛠️Equipment");
     }
     if (selected == data[3].key) {
-      setDisplayText("Supplements");
-      setSelectedCategory("Supplements");
+      setDisplayText("🥛Supplements");
+      setSelectedCategory("🥛Supplements");
     }
     console.log(selectedCategory);
     setForceUpdate(!forceUpdate);
@@ -184,26 +184,28 @@ const AddCommentButton = ({ title, onPress }) => {
   return (
     <View style={styles.container}>
       <View style={[styles.containerList, { backgroundColor: "#1E1E1E" }]}>
+        <Text style={styles.title}>{displayText}</Text>
         <SelectList
           data={data}
           setSelected={setSelected}
-          style={[styles.selectorBox]}
-          dropdownStyles={{ backgroundColor: "gray" }}
+          style={[styles.selectorBox, { left: 40 }]}
+          dropdownStyles={{ backgroundColor: "transparent" }}
           dropdownItemStyles={{ marginHorizontal: 10 }}
           dropdownTextStyles={{ color: "white" }}
+          placeholderTextColor="white"
           placeholder="Select Topic"
           searchPlaceholder="Choose topic"
           onSelect={runSelectTopic}
         />
-
-        <Text style={styles.title}>{displayText}</Text>
       </View>
-      <TouchableOpacity
-        style={styles.buttonClear}
-        onPress={() => setIsVisible(true)}
-      >
-        <Text style={styles.buttonTextClear}>{title}</Text>
-      </TouchableOpacity>
+      <View style={styles.spacing}>
+        <TouchableOpacity
+          style={styles.buttonClear}
+          onPress={() => setIsVisible(true)}
+        >
+          <Text style={styles.buttonTextClear}>{title}</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.underline}></View>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.commentHistoryContainer}>
@@ -262,32 +264,29 @@ const AddCommentButton = ({ title, onPress }) => {
 
 const styles = StyleSheet.create({
   title: {
-    top: 50,
-    left: 30,
+    top: 2,
     alignSelf: "left",
     fontSize: 32,
     color: "white",
+    marginRight: 100,
     zIndex: 2,
   },
   buttonClear: {
     borderWidth: 1,
     width: 101,
     height: 25,
-    position: "absolute",
     borderRadius: 25,
     borderColor: "white",
     backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "left",
-    left: 40,
-    top: 65,
+    left: 35,
     zIndex: 2,
   },
   underline: {
     borderColor: "white",
     borderBottomWidth: 1,
-    top: 120,
   },
   buttonTextClear: {
     color: "white",
@@ -295,10 +294,11 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "relative",
+    paddingTop: 10,
   },
   scrollContent: {
     borderColor: "white",
-    paddingTop: 130,
+    paddingTop: 15,
     height: 600,
   },
   button: {
@@ -427,7 +427,10 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
   },
   selectorBox: {
-    width: 200,
+    top: 50,
+  },
+  spacing: {
+    paddingBottom: 40,
   },
 });
 

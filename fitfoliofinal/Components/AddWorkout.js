@@ -130,6 +130,14 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent}>
         <View style={styles.workoutHistoryContainer}>
+          <View style={styles.spacing}>
+            <TouchableOpacity
+              style={styles.buttonClear}
+              onPress={() => setIsVisible(true)}
+            >
+              <Text style={styles.buttonTextClear}>{title}</Text>
+            </TouchableOpacity>
+          </View>
           {fetchedWorkouts.map((fetchedWorkout, index) => (
             <View key={index} style={styles.workoutBox}>
               <Text style={styles.historyTitle}>{fetchedWorkout.name}</Text>
@@ -150,12 +158,6 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
               </Text>
             </View>
           ))}
-          <TouchableOpacity
-            style={styles.buttonClear}
-            onPress={() => setIsVisible(true)}
-          >
-            <Text style={styles.buttonTextClear}>{title}</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -232,6 +234,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  spacing: {
+    paddingBottom: 25,
+  },
   buttonTextClear: {
     color: "#7A7A7A",
     fontSize: 40,
@@ -240,6 +245,7 @@ const styles = StyleSheet.create({
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
+    paddingBottom: 80,
   },
   scrollContent: {
     borderColor: "white",
