@@ -12,11 +12,13 @@ import {
   ScrollView,
 } from "react-native";
 
-const AccountScreen = ({ navigation }) => {
+const AccountScreen = ({ navigation, route }) => {
+  const { username } = route.params;
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>John Smith</Text>
+        <Text style={styles.name}>{username}</Text>
         <Text style={styles.date}>Mar 20, 2024</Text>
         <TouchableOpacity style={styles.accountButtons}>
           <Text style={styles.accountButtonsText}>

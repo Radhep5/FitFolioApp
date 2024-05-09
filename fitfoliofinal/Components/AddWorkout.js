@@ -14,7 +14,7 @@ import {
   ScrollView,
 } from "react-native";
 
-const AddWorkoutButton = ({ title, onPress, dateSend }) => {
+const AddWorkoutButton = ({ title, onPress, dateSend, username }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [workoutName, setWorkoutName] = useState("");
   const [sets, setSets] = useState(1);
@@ -57,7 +57,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
     setWorkoutHistory(updatedWorkoutHistory);
 
     try {
-      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const userDocRef = doc(trackerDB, username, "userdocID");
       const datesCollectionRef = collection(userDocRef, "dates");
       const dateDocRef = doc(datesCollectionRef, dateSend);
 
@@ -90,7 +90,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
     setWorkoutHistory(updatedWorkoutHistory);
 
     try {
-      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const userDocRef = doc(trackerDB, username, "userdocID");
       const datesCollectionRef = collection(userDocRef, "dates");
       const dateDocRef = doc(datesCollectionRef, dateSend);
 
@@ -110,7 +110,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend }) => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const userDocRef = doc(trackerDB, "user", "userdocID");
+        const userDocRef = doc(trackerDB, username, "userdocID");
         const datesCollectionRef = collection(userDocRef, "dates");
         const dateDocRef = doc(datesCollectionRef, dateSend);
 

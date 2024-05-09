@@ -14,13 +14,16 @@ import {
 } from "react-native";
 import AddCommentButton from "../Components/AddComment";
 
-const CommunityScreen = ({ navigation }) => {
+const CommunityScreen = ({ navigation, route }) => {
+  const { username } = route.params;
+
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
       <View style={styles.underline}>
         <AddCommentButton
           title="+ Create Post"
           onPress={() => console.log("Button pressed")}
+          username={username}
         />
       </View>
     </View>

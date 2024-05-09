@@ -14,8 +14,9 @@ import {
   StyleSheet,
 } from "react-native";
 
-const TrackerScreen = ({ navigation }) => {
+const TrackerScreen = ({ navigation, route }) => {
   const [dateSend, setDateSend] = useState("");
+  const { username } = route.params;
 
   return (
     <View style={[styles.container, { backgroundColor: "#1E1E1E" }]}>
@@ -27,6 +28,7 @@ const TrackerScreen = ({ navigation }) => {
           title="+"
           onPress={() => console.log("Button pressed")}
           dateSend={dateSend}
+          username={username}
         />
       </View>
     </View>

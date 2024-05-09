@@ -19,11 +19,12 @@ import {
 
 const { width: screenWidth } = Dimensions.get("window");
 
-const AddCommentButton = ({ title, onPress }) => {
+const AddCommentButton = ({ title, onPress, username }) => {
   const [selected, setSelected] = useState();
 
   const [isVisible, setIsVisible] = useState(false);
   const [paragraph, setParagraph] = useState("");
+  const name = username;
   const dateString = CurrentDateComponent();
   const [forceUpdate, setForceUpdate] = useState(false);
   const likeBoolean = false;
@@ -65,12 +66,14 @@ const AddCommentButton = ({ title, onPress }) => {
 
   const handleSaveComment = async () => {
     const comment = {
+      title: name,
       text: paragraph,
       date: dateString,
       category: selectedCategory,
       favorite: likeBoolean,
     };
     setCommentHistory([...commentHistory, comment]);
+    console.log("Name:", name);
     console.log("Comment:", paragraph);
     console.log("Date:", dateString);
     console.log("Category:", selectedCategory);
@@ -80,7 +83,7 @@ const AddCommentButton = ({ title, onPress }) => {
     setCommentHistory(updatedCommentHistory);
 
     try {
-      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const userDocRef = doc(trackerDB, username, "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -110,7 +113,7 @@ const AddCommentButton = ({ title, onPress }) => {
     setCommentHistory(updatedCommentHistory);
 
     try {
-      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const userDocRef = doc(trackerDB, username, "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -149,7 +152,7 @@ const AddCommentButton = ({ title, onPress }) => {
         updatedComments.push(commentToMove);
       }
 
-      const userDocRef = doc(trackerDB, "user", "userdocID");
+      const userDocRef = doc(trackerDB, username, "userdocID");
       const commentsCollectionRef = collection(userDocRef, "comments");
       const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -165,7 +168,7 @@ const AddCommentButton = ({ title, onPress }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const userDocRef = doc(trackerDB, "user", "userdocID");
+        const userDocRef = doc(trackerDB, username, "userdocID");
         const commentsCollectionRef = collection(userDocRef, "comments");
         const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
@@ -211,7 +214,7 @@ const AddCommentButton = ({ title, onPress }) => {
         <View style={styles.commentHistoryContainer}>
           {fetchedComments.map((fetchedComment, index) => (
             <View key={index} style={styles.commentBox}>
-              <Text style={styles.historyTitle}>User Name Here</Text>
+              <Text style={styles.historyTitle}>{fetchedComment.title}</Text>
               <Text style={styles.historyComment}>"{fetchedComment.text}"</Text>
               <Text style={styles.historyDate}>{fetchedComment.date}</Text>
               <TouchableOpacity
@@ -268,7 +271,7 @@ const styles = StyleSheet.create({
     alignSelf: "left",
     fontSize: 32,
     color: "white",
-    marginRight: 100,
+    marginRight: 20,
     zIndex: 2,
   },
   buttonClear: {
