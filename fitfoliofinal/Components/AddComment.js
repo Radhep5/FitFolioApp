@@ -168,23 +168,14 @@ const AddCommentButton = ({ title, onPress, username }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const userDocsSnapshot = await getDocs(collection(trackerDB, "Users"));
-        const fetchedComments = [];
+        const userDocRef = doc(trackerDB, username, "userdocID");
+        const commentsCollectionRef = collection(userDocRef, "comments");
+        const commentDocRef = doc(commentsCollectionRef, selectedCategory);
 
-        // Use Promise.all to ensure all async operations are completed before setting the state
-        await Promise.all(
-          userDocsSnapshot.docs.map(async (userDoc) => {
-            const commentsCollectionRef = collection(userDoc.ref, "comments");
-            const commentDocRef = doc(commentsCollectionRef, selectedCategory);
+        const commentDocSnapshot = await getDoc(commentDocRef);
+        const commentsData = commentDocSnapshot.data()?.comments || [];
 
-            const commentDocSnapshot = await getDoc(commentDocRef);
-            const commentsData = commentDocSnapshot.data()?.comments || [];
-
-            fetchedComments.push(...commentsData);
-          })
-        );
-
-        setFetchedComments(fetchedComments);
+        setFetchedComments(commentsData);
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
