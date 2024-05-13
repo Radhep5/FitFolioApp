@@ -57,10 +57,18 @@ const HomeScreen = ({ navigation }) => {
     if (email && password) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
+        navigation.navigate("Tracker", { username: email.split("@")[0] });
+        navigation.navigate("Community", { username: email.split("@")[0] });
+        navigation.navigate("Account", { username: email.split("@")[0] });
       } catch (err) {
         console.log("got error: ", err.message);
       }
     }
+  };
+  const onLoginPress = async () => {
+    navigation.navigate("Tracker", { username: email.split("@")[0] });
+    navigation.navigate("Community", { username: email.split("@")[0] });
+    navigation.navigate("Account", { username: email.split("@")[0] });
   };
 
   // const AuthListener = async () => {
@@ -154,7 +162,7 @@ const HomeScreen = ({ navigation }) => {
                     buttonStyle={styles.loginButton}
                     title="Login"
                     onPress={() => {
-                      handleHomeScreenOn();
+                      onLoginPress(), handleHomeScreenOn();
                     }}
                   />
                 </View>
