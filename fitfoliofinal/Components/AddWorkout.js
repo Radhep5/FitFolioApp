@@ -57,7 +57,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend, username }) => {
     setWorkoutHistory(updatedWorkoutHistory);
 
     try {
-      const userDocRef = doc(trackerDB, username, "userdocID");
+      const userDocRef = doc(trackerDB, "Users", username);
       const datesCollectionRef = collection(userDocRef, "dates");
       const dateDocRef = doc(datesCollectionRef, dateSend);
 
@@ -90,7 +90,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend, username }) => {
     setWorkoutHistory(updatedWorkoutHistory);
 
     try {
-      const userDocRef = doc(trackerDB, username, "userdocID");
+      const userDocRef = doc(trackerDB, "Users", username);
       const datesCollectionRef = collection(userDocRef, "dates");
       const dateDocRef = doc(datesCollectionRef, dateSend);
 
@@ -110,7 +110,7 @@ const AddWorkoutButton = ({ title, onPress, dateSend, username }) => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const userDocRef = doc(trackerDB, username, "userdocID");
+        const userDocRef = doc(trackerDB, "Users", username);
         const datesCollectionRef = collection(userDocRef, "dates");
         const dateDocRef = doc(datesCollectionRef, dateSend);
 
