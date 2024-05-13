@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   },
   heartButton: {
     position: "absolute",
-    left: 338,
+    left: 295,
     top: 3,
     padding: 5,
     borderRadius: 5,
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     position: "absolute",
-    left: 380,
+    left: 345,
     top: 3,
     padding: 5,
     borderRadius: 5,
