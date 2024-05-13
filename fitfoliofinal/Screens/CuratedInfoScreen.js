@@ -111,6 +111,18 @@ const CuratedInfoScreen = ({ navigation }) => {
   const selectedFoodPhrases = shuffledFoodPhrases.slice(0, 2);
   let meal1;
   let meal2;
+  const [firstWorkoutLabel, setFirstWorkoutLabel] = useState();
+  const [secondWorkoutLabel, setSecondWorkoutLabel] = useState();
+  const [thirdWorkoutLabel, setThirdWorkoutLabel] = useState();
+
+  const [firstWorkoutLabel2, setFirstWorkoutLabel2] = useState();
+  const [secondWorkoutLabel2, setSecondWorkoutLabel2] = useState();
+  const [thirdWorkoutLabel2, setThirdWorkoutLabel2] = useState();
+
+  const [mealOneDesc, setMealOneDesc] = useState();
+  const [mealTwoDesc, setMealTwoDesc] = useState();
+  const [mealOneVid, setMealOneVid] = useState();
+  const [mealTwoVid, setMealTwoVid] = useState();
 
   const data = [
     { key: "1", value: "Meals" },
@@ -151,11 +163,33 @@ const CuratedInfoScreen = ({ navigation }) => {
       const response = await axios.request(options);
       //console.log(response.data);
       const workouts = response.data; // Assuming response.data is an array of workouts
-      const randomIndex = Math.floor(Math.random() * workouts.length); // Generate a random index
-      const randomWorkout = workouts[randomIndex]; // Select a random workout
-      console.log(randomWorkout); // Log the random workout
-      const [firstKey, firstValue] = Object.entries(randomWorkout)[3];
-      console.log(`${firstKey}: ${firstValue}`);
+      const randomIndex1 = Math.floor(Math.random() * workouts.length);
+      const randomIndex2 = Math.floor(Math.random() * workouts.length);
+      while (randomIndex2 === randomIndex1) {
+        randomIndex2 = Math.floor(Math.random() * meals.length);
+      } // Generate a random index
+      const randomWorkout1 = workouts[randomIndex1]; // Select a random workout
+      console.log(randomWorkout1); // Log the random workout
+      const randomWorkout2 = workouts[randomIndex2];
+      console.log(randomWorkout2);
+      //3 is beginner sets
+      //1 is workout
+      //6 is equipment
+      //8 is long explanation
+      //9 is video
+      const [firstKey, firstValue] = Object.entries(randomWorkout1)[1];
+      setFirstWorkoutLabel(`${firstKey}: ${firstValue}`);
+      const [secondKey, secondValue] = Object.entries(randomWorkout1)[3];
+      setSecondWorkoutLabel(`${secondKey}: ${secondValue}`);
+      const [thirdKey, thirdValue] = Object.entries(randomWorkout1)[8];
+      setThirdWorkoutLabel(`${thirdKey}: ${thirdValue}`);
+
+      const [firstKey2, firstValue2] = Object.entries(randomWorkout2)[1];
+      setFirstWorkoutLabel2(`${firstKey2}: ${firstValue2}`);
+      const [secondKey2, secondValue2] = Object.entries(randomWorkout2)[3];
+      setSecondWorkoutLabel2(`${secondKey2}: ${secondValue2}`);
+      const [thirdKey2, thirdValue2] = Object.entries(randomWorkout2)[8];
+      setThirdWorkoutLabel2(`${thirdKey2}: ${thirdValue2}`);
     } catch (error) {
       console.error(error);
     }
@@ -189,8 +223,10 @@ const CuratedInfoScreen = ({ navigation }) => {
       meal1 = meals[randomIndex1];
       meal2 = meals[randomIndex2];
 
-      console.log("Meal 1 Description:", meal1.description);
-      console.log("Meal 2 Description:", meal2.description);
+      setMealOneDesc("Meal Description:", meal1.description);
+      setMealTwoDesc("Meal Description:", meal2.description);
+      setMealOneVid("Meal Video:", meal1.video_url);
+      setMealTwoVid("Meal Video:", meal2.video_url);
     } catch (error) {
       console.error(error);
     }
@@ -288,7 +324,23 @@ const CuratedInfoScreen = ({ navigation }) => {
                 borderRadius: 10,
               }}
             >
-              <Text>This is a popup modal!</Text>
+              {selected === data[0].key && (
+                <>
+                  <Text>{mealOneDesc}</Text>
+                  <Text>{mealOneVid}</Text>
+                </>
+              )}
+              {selected === data[1].key && (
+                <>
+                  <Text>{firstWorkoutLabel}</Text>
+                  <Text>{secondWorkoutLabel}</Text>
+                  <Text>{thirdWorkoutLabel}</Text>
+                </>
+              )}
+              {selected === data[2].key && (
+                <Text>{selectedEquipmentPhrases[0]}</Text>
+              )}
+
               <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
           </View>
@@ -346,7 +398,23 @@ const CuratedInfoScreen = ({ navigation }) => {
                 borderRadius: 10,
               }}
             >
-              <Text>This is a popup modal!</Text>
+              {selected === data[0].key && (
+                <>
+                  <Text>{mealTwoDesc}</Text>
+                  <Text>{mealTwoVid}</Text>
+                </>
+              )}
+              {selected === data[1].key && (
+                <>
+                  <Text>{firstWorkoutLabel2}</Text>
+                  <Text>{secondWorkoutLabel2}</Text>
+                  <Text>{thirdWorkoutLabel2}</Text>
+                </>
+              )}
+              {selected === data[2].key && (
+                <Text>{selectedEquipmentPhrases[0]}</Text>
+              )}
+
               <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
           </View>
